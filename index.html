@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -109,7 +110,7 @@
         .app-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px var(--shadow-medium); }
         .app-card-icon { width: 80px; height: 80px; border-radius: 25px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); pointer-events: none; }
         .app-name { font-weight: 700; color: var(--text-primary); padding: 0 5px; pointer-events: none; }
-        .app-meta { font-size: 13px; color: var(--text-secondary); pointer-events: none; }
+        .app-meta { font-size: 13px; color: var(--text-secondary); pointer-events: none; margin-top: 2px; }
         
         #paginationContainer { display: flex; justify-content: center; align-items: center; padding: 25px 15px; gap: 8px; }
         .page-link { cursor: pointer; color: var(--text-secondary); border: 1px solid var(--glass-border); background-color: var(--surface); padding: 8px 14px; border-radius: 12px; font-weight: 600; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
@@ -279,7 +280,16 @@
         itemsPerPage: 12,
     };
 
-    const firebaseConfig = { apiKey: "AIzaSyDOCrTKIHi0BTeWcdsgV_uAg9ZD6leMDy4", authDomain: "hypermod-caafc.firebaseapp.com", databaseURL: "https://hypermod-caafc-default-rtdb.firebaseio.com", projectId: "hypermod-caafc", storageBucket: "hypermod-caafc.firebasestorage.app", messagingSenderId: "949388328045", appId: "1:949388328045:web:1279367b44dca9d87cd364", measurementId: "G-BSE49V6RK4" };
+    // --- FIREBASE CONFIG (Updated to Premium Apps Free) ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDklPQcjXfwKIaOoBHQiJbAIq4PrqR2cxs",
+        authDomain: "premiumappsfree-ac666.firebaseapp.com",
+        databaseURL: "https://premiumappsfree-ac666-default-rtdb.firebaseio.com",
+        projectId: "premiumappsfree-ac666",
+        storageBucket: "premiumappsfree-ac666.appspot.com",
+        messagingSenderId: "406207439410",
+        appId: "1:406207439410:web:b98131982dd86d13de122b"
+    };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     
@@ -351,7 +361,9 @@
         const card = document.createElement('div');
         card.className = 'app-card ripple';
         card.dataset.id = app.id;
-        card.innerHTML = `<img class="app-card-icon" src="${app.img}" loading="lazy" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png';"><h4 class="app-name">${app.name}</h4><div class="app-meta">${app.rating || 0} ★</div>`;
+        // Updated to show Version and Size
+        const rating = app.averageRating ? app.averageRating.toFixed(1) : (app.rating || 0);
+        card.innerHTML = `<img class="app-card-icon" src="${app.img}" loading="lazy" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png';"><h4 class="app-name">${app.name}</h4><div class="app-meta">${rating} ★ | v${app.version || 'N/A'} | ${app.size || ''}</div>`;
         return card;
     }
 
@@ -376,7 +388,8 @@
     }
 
     function renderHomePage() {
-        const popularApps = state.apps.filter(app => app.isPremium === true);
+        // Checking for isPremium or isHot (Premium Apps Free uses isHot)
+        const popularApps = state.apps.filter(app => app.isPremium === true || app.isHot === true);
         DOMElements.home.popularCarousel.innerHTML = (popularApps.length > 0 && state.currentFilter === 'home')
             ? `<h2 class="section-title">${t('popularApps')}</h2><div class="popular-carousel">${popularApps.map(createPopularCardHTML).join('')}</div>`
             : '';
@@ -417,21 +430,39 @@
 
     function renderDetailPage(itemId) {
         const page = DOMElements.pages.details;
-        const item = state.apps.find(a => a.id === itemId);
+        // FIX 1: Ensure loose equality check or string comparison to avoid "App not found" due to type mismatch (number vs string)
+        const item = state.apps.find(a => String(a.id) === String(itemId));
         if (!item) { page.innerHTML = `<p>${t('appNotFound')}</p>`; return; }
 
         const reviews = Array.isArray(item.reviews) ? item.reviews : [];
-        const avgRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + Number(r.rating), 0) / reviews.length).toFixed(1) : (item.rating || 0);
-        const descList = item.desc ? item.desc.map(d => `<li><span class="material-icons-round">check_circle</span><span>${d}</span></li>`).join('') : '';
+        const avgRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + Number(r.rating), 0) / reviews.length).toFixed(1) : (item.averageRating || item.rating || 0);
+        
+        // FIX 2: Restore Hypermod Bullet Feature Logic (Checkmarks) for array data
+        // Check both 'desc' and 'description' fields and ensure it handles arrays correctly
+        let descListHTML = '';
+        const rawDesc = item.desc || item.description;
+
+        if (Array.isArray(rawDesc)) {
+            descListHTML = rawDesc.map(d => `<li><span class="material-icons-round">check_circle</span><span>${d}</span></li>`).join('');
+        } else if (typeof rawDesc === 'string') {
+             // Handle if description is a simple string, show as one item or split by newlines if preferred
+             descListHTML = `<li><span class="material-icons-round">info</span><span>${rawDesc}</span></li>`;
+        } else {
+             descListHTML = `<li><span class="material-icons-round">info</span><span>No description available.</span></li>`;
+        }
+        
         const screenshotHTML = (item.screenshots && item.screenshots.length > 0) ? `<div class="detail-section-content"><h4 class="subtitle">${t('screenshots')}</h4><div class="screenshot-gallery">${item.screenshots.map((ss, i) => `<img src="${ss}" class="screenshot-img" data-index="${i}" loading="lazy">`).join('')}</div></div>` : '';
         const isFav = state.favorites.includes(item.id);
-        const playStoreButtonHTML = item.playStoreLink ? `<a href="${item.playStoreLink}" target="_blank" class="btn btn-secondary ripple"><span class="material-icons-round">shop</span><span>${t('viewOnPlayStore')}</span></a>` : '';
+        
+        // FIX 3: Premium Apps Free Style Play Store Button (Image)
+        // Using an image instead of text for the Play Store link
+        const playStoreButtonHTML = item.playStoreLink ? `<a href="${item.playStoreLink}" target="_blank" class="btn btn-secondary ripple" style="padding: 0; background: none; border: none; box-shadow: none;"><img src="https://i.postimg.cc/Wbw73V2y/Picsart-25-07-13-10-48-29-353.png" style="height: 48px; width: auto; display: block;" alt="Get it on Google Play"></a>` : '';
         
         page.innerHTML = `
             <div>
                 <div class="detail-header"><button class="btn-back ripple" data-action="goBack"><span class="material-icons-round">arrow_back</span></button><h2 class="detail-title">${item.name}</h2></div>
                 <div style="padding: 0 16px;">
-                    <div class="detail-card"><img id="detailAppImage" src="${item.img}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png';"><div class="detail-info"><h3 id="detailAppName">${item.name}</h3><p id="detailAppCategory">${item.category}</p><div id="detailStarRating"><span class="stars">${'★'.repeat(Math.round(avgRating))}${'☆'.repeat(5 - Math.round(avgRating))}</span>&nbsp;(${avgRating})</div></div></div>
+                    <div class="detail-card"><img id="detailAppImage" src="${item.img}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png';"><div class="detail-info"><h3 id="detailAppName">${item.name}</h3><p id="detailAppCategory">${item.category} • v${item.version || 'N/A'} • ${item.size || ''}</p><div id="detailStarRating"><span class="stars">${'★'.repeat(Math.round(avgRating))}${'☆'.repeat(5 - Math.round(avgRating))}</span>&nbsp;(${avgRating})</div></div></div>
                     <div class="detail-actions">
                         <a href="${item.link}" target="_blank" class="btn btn-primary ripple"><span class="material-icons-round">download</span><span>${t('download')}</span></a>
                         <a href="https://player.vimeo.com/video/1080856907" target="_blank" class="btn btn-secondary ripple"><span class="material-icons-round">play_circle_outline</span><span>${t('howToDownload')}</span></a>
@@ -439,7 +470,7 @@
                         <button id="favBtn" class="btn btn-secondary ripple" data-action="toggleFavorite" data-id="${item.id}"><span class="material-icons-round">${isFav ? 'favorite' : 'favorite_border'}</span><span>${t('favorite')}</span></button>
                         <a href="https://t.me/HyperMod_1" target="_blank" class="btn btn-secondary ripple"><span class="material-icons-round">sync</span><span>${t('requestUpdate')}</span></a>
                     </div>
-                    <div class="detail-section-content"><h4 class="subtitle">${t('aboutItem')}</h4><div id="detailAppDescContainer"><ul>${descList}</ul></div></div>
+                    <div class="detail-section-content"><h4 class="subtitle">${t('aboutItem')}</h4><div id="detailAppDescContainer"><ul>${descListHTML}</ul></div></div>
                     ${screenshotHTML}
                 </div>
             </div>`;
@@ -587,7 +618,7 @@
     }
 
     function showLightbox(index) {
-        const item = state.apps.find(a => a.id === state.currentItemId);
+        const item = state.apps.find(a => String(a.id) === String(state.currentItemId));
         if (!item || !item.screenshots || !item.screenshots.length) return;
         DOMElements.lightbox.image.src = item.screenshots[parseInt(index)];
         DOMElements.lightbox.overlay.classList.add('active');
@@ -673,7 +704,8 @@
             const snapshot = await db.ref('apps').once('value');
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                const newApps = Object.keys(data).map(key => ({ id: key, ...data[key] })).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                // Map object to array and sort by addedTimestamp (descending)
+                const newApps = Object.keys(data).map(key => ({ id: key, ...data[key] })).sort((a, b) => (b.addedTimestamp || b.timestamp || 0) - (a.addedTimestamp || a.timestamp || 0));
                 
                 // Update state and cache
                 state.apps = newApps;
