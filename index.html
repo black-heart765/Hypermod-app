@@ -1,1026 +1,1167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
-    <title>Enchanted App Garden ♡</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>HyperMod Store</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
         :root {
-            --bg: #fff0f5; --surface: rgba(255, 255, 255, 0.9); --glass-border: rgba(255, 192, 203, 0.3); --primary: #de3163; --secondary: #c3aed6; --text-primary: #583759; --text-secondary: #8e7d8f; --font-display: 'Dancing Script', cursive; --font-body: 'Quicksand', sans-serif;
-            --grad-1: linear-gradient(135deg, #f8cdda, #fce4ec); --grad-2: linear-gradient(135deg, #e1bee7, #f3e5f5); --grad-3: linear-gradient(135deg, #c5cae9, #e8eaf6); --grad-4: linear-gradient(135deg, #bbdefb, #e3f2fd);
-            --star-color: #fbbc04;
-            --shadow-light: rgba(195, 174, 214, 0.15);
-            --shadow-medium: rgba(195, 174, 214, 0.25);
-        }
-        
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent !important;
-            outline: none !important; 
-        }
-        
-        html { scroll-behavior: smooth; height: 100%; }
-        body { 
-            font-family: var(--font-body); background-color: var(--bg); color: var(--text-primary); line-height: 1.6; 
-            transition: background-color .5s, color .5s; 
-            overflow-x: hidden; 
-            min-height: 100%;
-            overscroll-behavior-y: none;
+            --bg: #f5f3ff;
+            --surface: #ffffff;
+            --surface-2: #faf8ff;
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #c026d3 50%, #db2777 100%);
+            --primary-gradient-soft: linear-gradient(135deg, #ede9fe 0%, #fae8ff 100%);
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --text-primary: #1e1b4b;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+            --shadow-lg: 0 10px 40px rgba(124, 58, 237, 0.12);
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 28px;
         }
 
-        body.dark-mode { --bg: #2c2c2c; --surface: rgba(40, 40, 40, 0.8); --glass-border: rgba(100, 100, 100, 0.5); --primary: #ff69b4; --secondary: #a38db6; --text-primary: #f1f1f1; --text-secondary: #c0c0c0; --grad-1: linear-gradient(135deg, #5c3b3e, #4a3034); --grad-2: linear-gradient(135deg, #54445c, #423447); --grad-3: linear-gradient(135deg, #464858, #353744); --grad-4: linear-gradient(135deg, #414f5c, #313c46); --shadow-light: rgba(0, 0, 0, 0.15); --shadow-medium: rgba(0, 0, 0, 0.25); }
-        
-        body.day-0 { --primary: #de3163; --bg: #fff0f5; --glass-border: rgba(222, 49, 99, 0.2); }
-        body.day-1 { --primary: #8e44ad; --bg: #f5eef8; --glass-border: rgba(142, 68, 173, 0.2); }
-        body.day-2 { --primary: #2980b9; --bg: #eaf2f8; --glass-border: rgba(41, 128, 185, 0.2); }
-        body.day-3 { --primary: #27ae60; --bg: #e9f7ef; --glass-border: rgba(39, 174, 96, 0.2); }
-        body.day-4 { --primary: #e67e22; --bg: #fdf3e6; --glass-border: rgba(230, 126, 34, 0.2); }
-        body.day-5 { --primary: #16a085; --bg: #e8f6f3; --glass-border: rgba(22, 160, 133, 0.2); }
-        body.day-6 { --primary: #c0392b; --bg: #f9ebea; --glass-border: rgba(192, 57, 43, 0.2); }
+        body.dark-mode {
+            --bg: #0f0a1a;
+            --surface: #1a1425;
+            --surface-2: #231c32;
+            --text-primary: #f3f0ff;
+            --text-secondary: #a8a3b3;
+            --text-muted: #6b6577;
+            --border: #2d2440;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.4);
+        }
 
-        body.no-scroll { overflow: hidden; }
-        .hidden { display: none !important; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; min-height: 100vh; padding-bottom: 90px; }
 
-        /* --- LOADING SCREEN --- */
-        #loadingScreen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 9999;
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
-            transition: opacity 0.6s ease, visibility 0.6s;
-        }
-        .loading-logo-wrapper {
-            position: relative; width: 120px; height: 120px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .loading-logo-wrapper img {
-            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
-            animation: breathe 2s infinite ease-in-out;
-            box-shadow: 0 0 0 rgba(222, 49, 99, 0);
-        }
-        .loading-text {
-            margin-top: 20px; font-family: var(--font-display);
-            font-size: 2rem;
-            color: var(--primary);
-            animation: fadeInUp 1s ease;
-            font-weight: 700;
-        }
-        @keyframes breathe {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 var(--glass-border); }
-            50% { transform: scale(1.1); box-shadow: 0 0 20px 10px var(--glass-border); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 var(--glass-border); }
-        }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Loading */
+        #loadingScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
+        .loader-ring { width: 64px; height: 64px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-text { margin-top: 20px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.5rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* --- FIXED SNOW ANIMATION --- */
-        @keyframes winter-fall-sway {
-            0% { transform: translate(0, -20px); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translate(20px, 110vh); opacity: 0; } /* Falls deeper */
-        }
-        .snowflake {
-            position: fixed; top: -30px; 
-            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 100%);
-            border-radius: 50%; pointer-events: none; z-index: 9998;
-            will-change: transform;
-            animation-name: winter-fall-sway;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-            filter: drop-shadow(0 0 3px rgba(255,255,255,0.6));
-        }
-        body.dark-mode .snowflake { background: white; box-shadow: 0 0 5px rgba(255,255,255,0.9); }
-
-        /* --- CLICK WAVE --- */
-        .click-wave {
-            position: fixed; border-radius: 50%; pointer-events: none;
-            background: radial-gradient(circle, rgba(222, 49, 99, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
-            transform: scale(0); animation: waveEffect 0.6s ease-out forwards; z-index: 9999;
-        }
-        body.dark-mode .click-wave { background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%); }
-        @keyframes waveEffect { to { transform: scale(4); opacity: 0; } }
-        
-        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .page, .page-content { animation: fade-in .4s ease-out; }
-
-        @keyframes live-blink {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.15); opacity: 0.6; filter: drop-shadow(0 0 5px var(--primary)); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .blink-live { display: inline-block; animation: live-blink 1.2s infinite ease-in-out; will-change: transform, opacity; }
-
-        .header { background: var(--surface); padding: 12px 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        /* Header */
+        .app-header { position: sticky; top: 0; z-index: 100; background: rgba(245,243,255,0.85); backdrop-filter: blur(20px); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid transparent; transition: all 0.3s; }
+        body.dark-mode .app-header { background: rgba(15,10,26,0.85); }
+        .app-header.scrolled { border-bottom-color: var(--border); }
         .header-left { display: flex; align-items: center; gap: 12px; }
-        .header-logo-container { cursor: pointer; display: inline-block; position: relative; border-radius: 50%; padding: 3px; overflow: hidden; }
-        @keyframes rgb-border-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .header-logo-container::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 50%; background: linear-gradient(90deg, #ff69b4, #ffa500, #00ffff, #9370db, #ff69b4); background-size: 400% 400%; animation: rgb-border-flow 6s linear infinite; }
-        .header-logo-container img { height: 40px; width: 40px; border-radius: 50%; display: block; }
-        .welcome-title { font-family: var(--font-display); font-size: 2.2rem; color: var(--primary); }
-        .search-btn { background: none; border: none; cursor: pointer; color: var(--text-primary); font-size: 28px; padding: 5px; }
+        .menu-btn { width: 40px; height: 40px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--shadow-sm); }
+        .header-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.25rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-action { width: 40px; height: 40px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--shadow-sm); }
 
-        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 1999; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+        /* Side Menu */
+        .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 199; opacity: 0; visibility: hidden; transition: all 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
-        
-        .side-menu { position: fixed; top: 0; left: 0; height: 100%; width: 90%; max-width: 300px; background: var(--bg); z-index: 2000; transform: translateX(-100%); transition: transform 0.3s ease-in-out; display: flex; flex-direction: column; padding: 20px; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
+        .side-menu { position: fixed; top: 0; left: 0; width: 80%; max-width: 320px; height: 100%; background: var(--surface); z-index: 200; transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; padding: 20px; box-shadow: var(--shadow-lg); }
         .side-menu.active { transform: translateX(0); }
-        .side-menu-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-shrink: 0; }
-        .side-menu-brand { font-family: var(--font-display); font-size: 2rem; color: var(--primary); }
-        .close-menu-btn { background: var(--surface); border: none; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
-        .side-menu-nav { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex-grow: 1; padding-bottom: 20px; scrollbar-width: none; }
-        .side-menu-nav-item { 
-            background: var(--surface); padding: 15px; border-radius: 16px; text-decoration: none; color: var(--text-primary); transition: background-color 0.2s, color 0.2s, transform 0.2s; cursor: pointer; display: flex; align-items: center; gap: 15px; font-weight: 600; border: 1px solid var(--glass-border); 
-            opacity: 0; transform: translateX(-20px); 
-        }
-        .side-menu-nav-item:hover, .side-menu-nav-item.active { background-color: var(--primary); color: white; transform: translateX(5px) !important; }
-        .side-menu-nav-item:hover .material-icons-round, .side-menu-nav-item.active .material-icons-round { color: white; }
-        .side-menu-nav-item .material-icons-round { color: var(--primary); transition: color 0.2s ease; }
-        @keyframes menuSlideIn { to { opacity: 1; transform: translateX(0); } }
+        .side-menu-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .side-menu-brand { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.5rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .side-menu-close { width: 36px; height: 36px; border-radius: 10px; background: var(--surface-2); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary); }
+        .side-menu-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
+        .side-menu-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; color: var(--text-secondary); font-weight: 500; font-size: 0.95rem; }
+        .side-menu-item:hover, .side-menu-item.active { background: var(--primary-gradient-soft); color: var(--primary); }
+        .side-menu-item .material-icons-round { font-size: 22px; }
+        .side-menu-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-muted); text-align: center; }
 
-        .search-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: flex; flex-direction: column; padding: 15px; transform: translateY(-100%); transition: transform 0.4s ease-in-out; visibility: hidden; }
-        .search-overlay.active { transform: translateY(0); visibility: visible; }
-        .search-overlay-header { display: flex; align-items: center; margin-bottom: 20px; padding: 12px 20px; border-radius: 25px; border: 1px solid var(--glass-border); background: var(--surface); }
-        .close-search-btn { background: none; border: none; cursor: pointer; color: var(--primary); font-size: 16px; font-weight: 700; text-transform: uppercase; margin-left: 15px; }
-        #searchResultsContainer { flex-grow: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; padding: 10px; }
-        .search-field { position: relative; flex-grow: 1; } #mainSearchInput { width: 100%; border: none; background: none; outline: none; font-size: 16px; font-family: var(--font-body); color: var(--text-primary); padding: 8px 0; }
-        .search-label { position: absolute; left: 0; top: 8px; color: var(--text-secondary); font-size: 16px; pointer-events: none; transition: all 0.2s ease; transform-origin: left top; }
-        #mainSearchInput:focus + .search-label, #mainSearchInput:not(:placeholder-shown) + .search-label { transform: translateY(-16px) scale(0.75); color: var(--primary); }
+        /* Search Overlay */
+        .search-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 300; transform: translateY(-100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; }
+        .search-overlay.active { transform: translateY(0); }
+        .search-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
+        .search-back { width: 40px; height: 40px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); }
+        .search-input-wrap { flex: 1; position: relative; }
+        .search-input-wrap input { width: 100%; height: 44px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); padding: 0 44px 0 16px; font-family: inherit; font-size: 0.95rem; color: var(--text-primary); }
+        .search-input-wrap input::placeholder { color: var(--text-muted); }
+        .search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; }
+        .search-results { flex: 1; overflow-y: auto; padding: 8px 16px 16px; }
 
-        .app-root { min-height: 100vh; padding-bottom: 90px; }
-        .section-title { padding: 16px; font-size: 1.8rem; font-family: var(--font-display); color: var(--primary); }
-        
-        .popular-carousel { display: flex; gap: 20px; overflow-x: auto; padding: 15px 16px 30px 16px; margin: 0 0 10px 0; scroll-snap-type: x mandatory; }
-        .popular-carousel::-webkit-scrollbar { display: none; }
-        .popular-card-item { flex: 0 0 260px; position: relative; cursor: pointer; display: flex; flex-direction: column; align-items: center; scroll-snap-align: start; }
-        .popular-card-base { 
-            width: 100%; height: 190px; border-radius: 35px; overflow: visible; position: relative; 
-            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #e0c3fc, #a18cd1, #8ec5fc);
-            background-size: 300% 300%; animation: gradientFlow 8s ease infinite;
-            border: 3px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease; 
-        }
-        .popular-card-item:hover .popular-card-base { transform: scale(1.02) translateY(-5px); box-shadow: 0 15px 40px rgba(255, 105, 180, 0.5); }
-        @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .popular-app-logo-wrapper { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; border-radius: 24px; overflow: hidden; z-index: 10; 
-            background-color: rgba(255, 255, 255, 0.95); box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.5), 0 0 20px rgba(222, 49, 99, 0.3); border: 1px solid rgba(255, 255, 255, 1);
-        }
-        .popular-app-logo { width: 100%; height: 100%; object-fit: cover; }
-        .popular-card-app-name { 
-            font-size: 17px; font-weight: 700; color: var(--text-primary); margin-top: 15px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; padding: 5px 15px; 
-            background: rgba(255,255,255,0.6); border-radius: 20px; backdrop-filter: blur(5px);
-        }
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 6px 0 12px; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 12px; border-radius: 12px; cursor: pointer; color: var(--text-muted); transition: all 0.2s; font-size: 0.7rem; font-weight: 500; border: none; background: none; }
+        .nav-item .material-icons-round { font-size: 24px; }
+        .nav-item.active { color: var(--primary); background: var(--primary-gradient-soft); }
 
-        .app-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); padding: 0 16px; }
-        
-        /* --- FIXED SCROLL ANIMATION CSS --- */
-        .app-card { 
-            width: 100%; flex-shrink: 0; cursor: pointer; text-align: center; background: var(--surface); padding: 16px 8px; border-radius: 35px; border: 1px solid var(--glass-border); 
-            box-shadow: 0 10px 25px var(--shadow-light); position: relative; will-change: transform; 
-            /* Initial State for Animation */
-            opacity: 0; transform: translateY(30px) scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
-        }
-        /* Active state when in viewport */
-        .app-card.active-scroll {
-            opacity: 1; transform: translateY(0) scale(1);
-        }
-        .app-card:hover { transform: translateY(-8px) scale(1.02) !important; box-shadow: 0 15px 35px var(--shadow-medium); }
-        
-        .app-card-icon { width: 80px; height: 80px; border-radius: 25px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); pointer-events: none; }
-        .app-name { font-weight: 700; color: var(--text-primary); padding: 0 5px; pointer-events: none; }
-        .app-meta { font-size: 13px; color: var(--text-secondary); pointer-events: none; margin-top: 2px; }
-        
-        #paginationContainer { display: flex; justify-content: center; align-items: center; padding: 25px 15px; gap: 8px; }
-        .page-link { cursor: pointer; color: var(--text-secondary); border: 1px solid var(--glass-border); background-color: var(--surface); padding: 8px 14px; border-radius: 12px; font-weight: 600; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
-        .page-link:hover, .page-link.active { background-color: var(--primary); color: white; border-color: var(--primary); }
-        
-        .rgb-creator-name { font-weight: bold; font-size: 1.6rem; letter-spacing: 2px; background: linear-gradient(90deg, #ff69b4, #ffa500, var(--secondary), #9370db, #ff69b4); background-size: 500% 500%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgbGlow 6s ease-in-out infinite; }
-        @keyframes rgbGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        
-        .detail-header { display: flex; align-items: center; margin-bottom: 25px; gap: 15px; }
-        .btn-back { background: none; border: none; color: var(--text-primary); font-size: 28px; cursor: pointer; padding: 5px; }
-        .detail-title { font-size: 22px; font-weight: 600; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .detail-card { background: var(--surface); padding: 20px; border-radius: 20px; display: flex; gap: 20px; align-items: center; margin-bottom: 25px; box-shadow: 0 8px 30px var(--shadow-medium); }
-        #detailAppImage { width: 80px; height: 80px; border-radius: 20px; object-fit: cover; flex-shrink: 0; }
-        .detail-info { flex-grow: 1; }
-        #detailAppName { font-size: 20px; font-weight: 600; color: var(--text-primary); }
-        #detailAppCategory { font-size: 14px; color: var(--text-secondary); margin: 2px 0 6px 0; }
-        #detailStarRating { font-size: 14px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
-        #detailStarRating .stars { color: var(--star-color); font-size: 18px; }
-        .detail-actions { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; }
-        .btn { padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: background-color 0.2s, transform 0.2s; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background-color: color-mix(in srgb, var(--primary) 85%, black); transform: translateY(-2px); }
-        .btn-secondary { background: var(--glass-border); color: var(--text-primary); }
-        .btn-secondary:hover { background: color-mix(in srgb, var(--primary) 20%, transparent); transform: translateY(-2px); }
-        .detail-section-content { margin-bottom: 25px; }
-        .detail-section-content .subtitle { color: var(--primary); margin-bottom: 15px; font-size: 1.8rem; font-weight: 600; font-family: var(--font-display); }
-        #detailAppDescContainer ul { list-style: none; padding-left: 0; }
-        #detailAppDescContainer li { display: flex; align-items: flex-start; margin-bottom: 12px; font-size: 15px; }
-        #detailAppDescContainer li .material-icons-round { margin-right: 12px; font-size: 22px; color: var(--primary); }
-        .screenshot-gallery { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
-        .screenshot-img { height: 250px; width: auto; border-radius: 12px; object-fit: cover; border: 1px solid var(--glass-border); cursor:pointer; }
-        
-        .lightbox-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 4000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
-        .lightbox-overlay.active { opacity: 1; visibility: visible; }
-        .lightbox-content { position: relative; max-width: 95vw; max-height: 90vh; }
-        .lightbox-image { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
-        .lightbox-close { position: absolute; top: 10px; right: 10px; background: none; border: none; color: white; font-size: 40px; cursor: pointer; }
+        /* Pages */
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        .settings-header, .favorites-header { position: sticky; top: 0; z-index: 10; padding: 20px 24px 16px; background: color-mix(in srgb, var(--bg) 80%, transparent); backdrop-filter: blur(5px); }
-        .settings-main, .favorites-main { padding: 0 16px 24px; }
-        .settings-group { margin-bottom: 24px; }
-        .settings-group-title { font-family: var(--font-display); color: var(--primary); font-size: 1.6rem; padding-left: 8px; margin-bottom: 8px; }
-        .settings-card { background: var(--surface); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 16px var(--shadow-light); }
-        .settings-item { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; }
-        .settings-item a { text-decoration: none; color: inherit; display: flex; align-items: center; flex-grow: 1; }
-        .settings-item:not(:last-child) { border-bottom: 1px solid var(--glass-border); }
-        .settings-item-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; justify-content: center; align-items: center; margin-right: 16px; color: var(--primary); }
-        .settings-item-icon.grad-1 { background-image: var(--grad-1); } .settings-item-icon.grad-2 { background-image: var(--grad-2); } .settings-item-icon.grad-3 { background-image: var(--grad-3); } .settings-item-icon.grad-4 { background-image: var(--grad-4); }
-        .settings-item-label { flex-grow: 1; font-weight: 500; font-size: 16px; }
-        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.1); transition: .4s; border-radius: 28px; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(22px); }
-        
-        .bottom-nav { 
-            position: fixed; bottom: 16px; left: 16px; right: 16px; 
-            width: auto; background: var(--surface); 
-            display: flex; justify-content: space-around; 
-            padding: 8px; border-radius: 32px; 
-            border: 1px solid var(--glass-border); 
-            box-shadow: 0 8px 32px 0 var(--shadow-medium); 
-            z-index: 100; transition: transform 0.3s ease-in-out; 
-        }
-        .bottom-nav.hidden { transform: translateY(150%); }
-        .nav-item { padding: 8px 20px; border-radius: 24px; color: var(--text-secondary); cursor: pointer; transition: background-color .3s, color .3s; }
-        .nav-item.active { background: var(--primary); color: white; }
-        .nav-item.active .material-icons-round { color: white; }
-        
-        #languageModal { position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); display:flex; justify-content: center; align-items: center; animation: fade-in 0.3s; }
-        .modal-content { background: var(--bg); border: 1px solid var(--glass-border); width: 90%; max-width: 400px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-        .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
-        .modal-title { font-family: var(--font-display); font-size: 1.8rem; color: var(--primary); }
-        .modal-close { cursor: pointer; font-size: 28px; color: var(--text-secondary); }
-        .modal-body { padding: 8px; max-height: 60vh; overflow-y: auto; }
-        .lang-option { padding: 14px 20px; font-weight: 500; cursor: pointer; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .lang-option:hover { background-color: rgba(255,192,203,0.1); }
-        .lang-option.active { color: var(--primary); font-weight: 700; }
-        
-        html[dir="rtl"] .header-left { flex-direction: row-reverse; }
-        html[dir="rtl"] .side-menu { right: 0; left: auto; transform: translateX(100%); }
-        html[dir="rtl"] .side-menu.active { transform: translateX(0); }
-        html[dir="rtl"] .side-menu-nav-item:hover, html[dir="rtl"] .side-menu-nav-item.active { transform: translateX(-5px); }
-        html[dir="rtl"] .star-rating { direction: ltr; }
+        /* Section Headers */
+        .section-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 8px; }
+        .section-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; }
+        .section-link { font-size: 0.8rem; color: var(--primary); font-weight: 600; cursor: pointer; }
 
-        .notification-toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-            border: 1px solid var(--primary); padding: 15px 20px; border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px;
-            z-index: 5000; transition: top 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); cursor: pointer; width: 90%; max-width: 400px;
-        }
-        .notification-toast.active { top: 80px; }
-        .notification-toast img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
-        .notification-toast-content { flex: 1; }
-        .notification-title { font-weight: bold; color: var(--primary); font-size: 14px; }
-        .notification-body { font-size: 12px; color: var(--text-primary); }
+        /* Popular Carousel */
+        .popular-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 8px 16px 16px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .popular-scroll::-webkit-scrollbar { display: none; }
+        .popular-card { flex: 0 0 160px; scroll-snap-align: start; cursor: pointer; }
+        .popular-card-img { width: 100%; aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--primary-gradient-soft); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 1px solid var(--border); }
+        .popular-card-img img { width: 70%; height: 70%; object-fit: contain; border-radius: 16px; }
+        .popular-card-badge { position: absolute; top: 8px; right: 8px; background: var(--primary-gradient); color: white; font-size: 0.6rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+        .popular-card-name { font-weight: 600; font-size: 0.85rem; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .popular-card-meta { font-size: 0.75rem; color: var(--text-muted); }
 
-        .user-rating-section { background: var(--surface); padding: 20px; border-radius: 20px; margin-top: 20px; text-align: center; border: 1px solid var(--glass-border); }
-        .rating-stars { display: flex; justify-content: center; gap: 10px; margin-top: 10px; direction: ltr; }
-        .rating-star-btn { font-size: 35px; color: #ccc; cursor: pointer; transition: transform 0.2s, color 0.2s; }
-        .rating-star-btn:hover, .rating-star-btn.selected { color: var(--star-color); transform: scale(1.2); }
+        /* App List Item */
+        .app-list { padding: 0 16px; }
+        .app-list-item { display: flex; align-items: center; gap: 14px; padding: 12px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 10px; box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.2s; }
+        .app-list-item:active { transform: scale(0.98); }
+        .app-list-icon { width: 56px; height: 56px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+        .app-list-info { flex: 1; min-width: 0; }
+        .app-list-name { font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+        .app-list-badge { background: var(--primary-gradient); color: white; font-size: 0.55rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .app-list-meta { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+        .app-list-meta .star { color: #fbbf24; font-size: 0.85rem; }
+        .app-list-download { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-gradient-soft); border: none; color: var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+
+        /* Category Grid */
+        .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 8px 16px 16px; }
+        .category-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px 16px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm); }
+        .category-card:active { transform: scale(0.97); }
+        .category-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--primary-gradient-soft); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; color: var(--primary); font-size: 26px; }
+        .category-name { font-weight: 600; font-size: 0.9rem; }
+        .category-count { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* Favorites List */
+        .fav-list-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .fav-list-icon { width: 48px; height: 48px; border-radius: 12px; object-fit: cover; }
+        .fav-list-info { flex: 1; }
+        .fav-list-name { font-weight: 600; font-size: 0.9rem; }
+        .fav-list-meta { font-size: 0.78rem; color: var(--text-secondary); }
+        .fav-heart { color: #ec4899; font-size: 22px; }
+
+        /* Downloads */
+        .download-tabs { display: flex; gap: 8px; padding: 12px 16px; }
+        .download-tab { flex: 1; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); font-family: inherit; font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+        .download-tab.active { background: var(--primary-gradient); color: white; border-color: transparent; }
+        .download-item { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+        .download-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .download-icon { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
+        .download-info { flex: 1; }
+        .download-name { font-weight: 600; font-size: 0.88rem; }
+        .download-sub { font-size: 0.75rem; color: var(--text-muted); }
+        .download-actions { display: flex; gap: 8px; }
+        .download-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary); }
+        .download-progress-bg { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+        .download-progress-fill { height: 100%; background: var(--primary-gradient); border-radius: 4px; transition: width 0.3s; }
+        .download-status { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; }
+
+        /* Profile */
+        .profile-header { background: var(--primary-gradient); padding: 40px 20px 60px; text-align: center; position: relative; }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.3); object-fit: cover; margin: 0 auto 12px; }
+        .profile-name { color: white; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.2rem; }
+        .profile-badge { display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 0.7rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-top: 6px; backdrop-filter: blur(10px); }
+        .profile-menu { margin-top: -30px; padding: 0 16px; position: relative; z-index: 2; }
+        .profile-card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+        .profile-item { display: flex; align-items: center; gap: 14px; padding: 16px; cursor: pointer; transition: background 0.2s; }
+        .profile-item:not(:last-child) { border-bottom: 1px solid var(--border); }
+        .profile-item:hover { background: var(--surface-2); }
+        .profile-item-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-gradient-soft); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 20px; }
+        .profile-item-info { flex: 1; }
+        .profile-item-label { font-weight: 600; font-size: 0.9rem; }
+        .profile-item-sub { font-size: 0.78rem; color: var(--text-muted); }
+        .profile-item-arrow { color: var(--text-muted); }
+        .profile-item-tag { font-size: 0.7rem; color: var(--accent-pink); font-weight: 600; }
+
+        /* Detail Page */
+        .detail-page { background: var(--bg); min-height: 100vh; padding-bottom: 100px; }
+        .detail-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; position: sticky; top: 0; background: rgba(245,243,255,0.9); backdrop-filter: blur(20px); z-index: 50; }
+        body.dark-mode .detail-header-bar { background: rgba(15,10,26,0.9); }
+        .detail-back { width: 40px; height: 40px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); }
+        .detail-actions-top { display: flex; gap: 8px; }
+        .detail-action-btn { width: 40px; height: 40px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); }
+
+        .detail-hero { padding: 16px; display: flex; gap: 16px; align-items: center; }
+        .detail-icon { width: 88px; height: 88px; border-radius: var(--radius); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow); }
+        .detail-hero-info { flex: 1; }
+        .detail-name { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .detail-mod-badge { background: var(--primary-gradient); color: white; font-size: 0.6rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+        .detail-dev { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
+        .detail-version { font-size: 0.75rem; color: var(--text-muted); }
+
+        .detail-stats { display: flex; justify-content: space-around; padding: 16px; margin: 0 16px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); }
+        .detail-stat { text-align: center; }
+        .detail-stat-value { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; }
+        .detail-stat-label { font-size: 0.72rem; color: var(--text-muted); }
+
+        .detail-section { padding: 16px; }
+        .detail-section-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+        .detail-features { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 16px; }
+        .detail-feature-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 0.88rem; color: var(--text-secondary); }
+        .detail-feature-item .material-icons-round { color: #10b981; font-size: 18px; }
+
+        .screenshot-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+        .screenshot-scroll::-webkit-scrollbar { display: none; }
+        .screenshot-thumb { height: 180px; border-radius: var(--radius-sm); object-fit: cover; cursor: pointer; border: 1px solid var(--border); }
+
+        .detail-download-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 12px 16px 24px; display: flex; gap: 12px; z-index: 100; }
+        .detail-download-btn { flex: 1; height: 50px; border-radius: var(--radius); background: var(--primary-gradient); color: white; border: none; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 20px rgba(124,58,237,0.3); }
+        .detail-fav-btn { width: 50px; height: 50px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary); font-size: 24px; }
+        .detail-fav-btn.active { color: #ec4899; }
+
+        .detail-rating { padding: 0 16px 16px; }
+        .rating-stars { display: flex; gap: 8px; justify-content: center; }
+        .rating-star { font-size: 32px; color: #d1d5db; cursor: pointer; transition: all 0.2s; }
+        .rating-star.active { color: #fbbf24; }
+
+        /* Lightbox */
+        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: none; align-items: center; justify-content: center; }
+        .lightbox.active { display: flex; }
+        .lightbox img { max-width: 95%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
+        .lightbox-close { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; }
+
+        /* Toast */
+        .toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; border-radius: var(--radius); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; z-index: 5000; transition: top 0.4s cubic-bezier(0.34,1.56,0.64,1); max-width: 90%; }
+        .toast.show { top: 20px; }
+        .toast img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+        .toast-content { flex: 1; }
+        .toast-title { font-weight: 700; font-size: 0.85rem; }
+        .toast-body { font-size: 0.78rem; color: var(--text-secondary); }
+
+        /* Modals */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: var(--surface); border-radius: var(--radius-lg); width: 100%; max-width: 380px; max-height: 80vh; overflow: hidden; box-shadow: var(--shadow-lg); }
+        .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+        .modal-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; }
+        .modal-close { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 24px; }
+        .modal-body { padding: 8px; overflow-y: auto; max-height: 50vh; }
+        .lang-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.2s; }
+        .lang-row:hover { background: var(--surface-2); }
+        .lang-row.active { color: var(--primary); font-weight: 700; }
+
+        /* Settings inside profile */
+        .settings-toggle { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--border); }
+        .settings-toggle-label { font-weight: 600; font-size: 0.9rem; }
+        .toggle-switch { position: relative; width: 48px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: var(--border); border-radius: 26px; transition: 0.3s; }
+        .toggle-slider::before { content: ''; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input:checked + .toggle-slider { background: var(--primary); }
+        input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state .material-icons-round { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+        .empty-state h3 { font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+        .empty-state p { font-size: 0.85rem; }
+
+        /* Scrollbar hide */
+        .hide-scroll { scrollbar-width: none; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+
+        /* Ripple effect */
+        .ripple { position: relative; overflow: hidden; }
+        .ripple::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 70%); transform: scale(0); opacity: 0; transition: transform 0.5s, opacity 0.5s; border-radius: inherit; pointer-events: none; }
+        .ripple:active::after { transform: scale(2.5); opacity: 1; transition: 0s; }
     </style>
 </head>
 <body>
 
+<!-- Loading -->
 <div id="loadingScreen">
-    <div class="loading-logo-wrapper">
-        <img src="https://i.ibb.co/tTNj64wq/Telegram-Logk.png" alt="Loading...">
-    </div>
-    <div class="loading-text">Aisha</div>
+    <div class="loader-ring"></div>
+    <div class="loader-text">HyperMod</div>
 </div>
 
-<div id="hearts-container"></div>
-
-<audio id="notifSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-<div id="notificationToast" class="notification-toast ripple">
-    <img id="notifImage" src="" alt="">
-    <div class="notification-toast-content">
-        <div class="notification-title">✨ New Update!</div>
-        <div id="notifMessage" class="notification-body">A new app has been added.</div>
+<!-- Toast -->
+<div id="toast" class="toast">
+    <img id="toastImg" src="" alt="">
+    <div class="toast-content">
+        <div class="toast-title" id="toastTitle">Update</div>
+        <div class="toast-body" id="toastBody">New app added</div>
     </div>
-    <span class="material-icons-round" style="color: var(--primary)">arrow_forward</span>
 </div>
 
-<div class="menu-overlay"></div>
-<div class="side-menu">
+<!-- Menu -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="side-menu" id="sideMenu">
     <div class="side-menu-header">
-        <h2 class="side-menu-brand"></h2>
-        <button class="close-menu-btn ripple"><span class="material-icons-round">close</span></button>
+        <div class="side-menu-brand">HyperMod</div>
+        <button class="side-menu-close" id="closeMenu"><span class="material-icons-round">close</span></button>
     </div>
-    <nav id="sideMenuNav" class="side-menu-nav"></nav>
+    <nav class="side-menu-nav" id="sideMenuNav"></nav>
+    <div class="side-menu-footer">Made with ♡ by Aisha</div>
 </div>
 
-<div id="searchOverlay" class="search-overlay">
-    <div class="search-overlay-header">
-        <div class="search-field"><input type="text" id="mainSearchInput" placeholder=" " autocomplete="off"><label for="mainSearchInput" class="search-label"></label></div>
-        <button class="close-search-btn ripple"></button>
-    </div>
-    <div id="searchResultsContainer"></div>
-</div>
-
-<div id="lightboxOverlay" class="lightbox-overlay">
-    <div class="lightbox-content">
-        <img id="lightboxImage" class="lightbox-image" src="">
-        <button id="lightboxClose" class="lightbox-close material-icons-round">close</button>
-    </div>
-</div>
-
-<div id="languageModal" class="hidden">
-    <div class="modal-content">
-        <div class="modal-header"><h2 class="modal-title"></h2><span class="material-icons-round modal-close ripple">&times;</span></div>
-        <div class="modal-body"></div>
-    </div>
-</div>
-
-<div class="header hidden">
-    <div class="header-left">
-        <div class="header-logo-container ripple">
-            <img src="https://i.ibb.co/tTNj64wq/Telegram-Logk.png" alt="logo">
+<!-- Search -->
+<div class="search-overlay" id="searchOverlay">
+    <div class="search-header">
+        <button class="search-back" id="closeSearch"><span class="material-icons-round">arrow_back</span></button>
+        <div class="search-input-wrap">
+            <input type="text" id="searchInput" placeholder="Search apps, games..." autocomplete="off">
+            <button class="search-clear" id="searchClear"><span class="material-icons-round">close</span></button>
         </div>
-        <h1 class="welcome-title"></h1>
     </div>
-    <button class="search-btn ripple"><span class="material-icons-round">search</span></button>
+    <div class="search-results" id="searchResults"></div>
 </div>
 
-<div id="appRoot" class="app-root">
-    <div id="homePage" class="page">
-        <div id="popularCarouselContainer"></div>
-        <h2 id="pageTitle" class="section-title"></h2>
-        <div id="appGrid" class="app-grid"></div>
-        <div id="paginationContainer"></div>
-        <div style="margin-top: 30px; text-align: center;"><p class="rgb-creator-name">🌸 𝐀 𝐈 𝐒 𝐇 𝐀 🌸</p></div>
-    </div>
-    <div id="detailPage" class="page hidden"></div>
-    <div id="favoritesPage" class="page hidden"></div>
-    <div id="settingsPage" class="page hidden"></div>
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <img id="lightboxImg" src="" alt="">
+    <button class="lightbox-close" id="lightboxClose"><span class="material-icons-round">close</span></button>
 </div>
 
-<nav id="bottomNav" class="bottom-nav"></nav>
+<!-- Language Modal -->
+<div class="modal-overlay" id="langModal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div class="modal-title" id="langModalTitle">Language</div>
+            <button class="modal-close" id="langModalClose"><span class="material-icons-round">close</span></button>
+        </div>
+        <div class="modal-body" id="langModalBody"></div>
+    </div>
+</div>
+
+<!-- Header -->
+<header class="app-header" id="appHeader">
+    <div class="header-left">
+        <button class="menu-btn ripple" id="menuBtn"><span class="material-icons-round">menu</span></button>
+        <div class="header-title" id="headerTitle">Welcome to Your Mods!</div>
+    </div>
+    <button class="header-action ripple" id="searchBtn"><span class="material-icons-round">search</span></button>
+</header>
+
+<!-- Main Content -->
+<main id="mainContent">
+
+    <!-- HOME -->
+    <div class="page active" id="pageHome">
+        <div class="section-header">
+            <div class="section-title">Popular Apps</div>
+            <div class="section-link" data-action="navigate" data-page="categories">View all</div>
+        </div>
+        <div class="popular-scroll hide-scroll" id="popularCarousel"></div>
+
+        <div class="section-header">
+            <div class="section-title">Latest Apps</div>
+            <div class="section-link" data-action="changePage" data-page="1">Refresh</div>
+        </div>
+        <div class="app-list" id="appList"></div>
+        <div id="paginationWrap" style="display:flex;justify-content:center;padding:16px;gap:6px;"></div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="page" id="pageCategories">
+        <div class="section-header">
+            <div class="section-title">Categories</div>
+        </div>
+        <div class="category-grid" id="categoryGrid"></div>
+    </div>
+
+    <!-- FAVORITES -->
+    <div class="page" id="pageFavorites">
+        <div class="section-header">
+            <div class="section-title">Your Favorites</div>
+        </div>
+        <div id="favoritesList"></div>
+    </div>
+
+    <!-- DOWNLOADS -->
+    <div class="page" id="pageDownloads">
+        <div class="section-header">
+            <div class="section-title">Downloads</div>
+        </div>
+        <div class="download-tabs">
+            <button class="download-tab active" data-tab="downloading">Downloading</button>
+            <button class="download-tab" data-tab="completed">Completed</button>
+        </div>
+        <div id="downloadsList"></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="pageProfile">
+        <div class="profile-header">
+            <img src="https://i.ibb.co/tTNj64wq/Telegram-Logk.png" class="profile-avatar" alt="Avatar">
+            <div class="profile-name">HyperMod User</div>
+            <div class="profile-badge">⭐ Premium</div>
+        </div>
+        <div class="profile-menu">
+            <div class="profile-card">
+                <div class="profile-item" data-action="navigate" data-page="downloads">
+                    <div class="profile-item-icon"><span class="material-icons-round">download</span></div>
+                    <div class="profile-item-info"><div class="profile-item-label">Downloads</div></div>
+                    <span class="material-icons-round profile-item-arrow">chevron_right</span>
+                </div>
+                <div class="profile-item" data-action="openTelegram">
+                    <div class="profile-item-icon"><span class="material-icons-round">send</span></div>
+                    <div class="profile-item-info"><div class="profile-item-label">Join Telegram</div><div class="profile-item-sub">Stay updated</div></div>
+                    <span class="material-icons-round profile-item-arrow">chevron_right</span>
+                </div>
+                <div class="profile-item" data-action="requestApp">
+                    <div class="profile-item-icon"><span class="material-icons-round">add_box</span></div>
+                    <div class="profile-item-info"><div class="profile-item-label">Request an App</div><div class="profile-item-sub">Don't see your app?</div></div>
+                    <span class="material-icons-round profile-item-arrow">chevron_right</span>
+                </div>
+                <div class="profile-item" data-action="openSettings">
+                    <div class="profile-item-icon"><span class="material-icons-round">settings</span></div>
+                    <div class="profile-item-info"><div class="profile-item-label">Settings</div></div>
+                    <span class="material-icons-round profile-item-arrow">chevron_right</span>
+                </div>
+            </div>
+            <div style="height:16px;"></div>
+            <div class="profile-card">
+                <div class="profile-item" data-action="openLanguageModal">
+                    <div class="profile-item-icon"><span class="material-icons-round">language</span></div>
+                    <div class="profile-item-info"><div class="profile-item-label">Language</div><div class="profile-item-sub" id="currentLangLabel">English</div></div>
+                    <span class="material-icons-round profile-item-arrow">chevron_right</span>
+                </div>
+                <div class="settings-toggle">
+                    <div class="settings-toggle-label">Dark Mode</div>
+                    <label class="toggle-switch"><input type="checkbox" id="darkToggle"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-toggle">
+                    <div class="settings-toggle-label">Snowfall Effect</div>
+                    <label class="toggle-switch"><input type="checkbox" id="snowToggle" checked><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-toggle">
+                    <div class="settings-toggle-label">Click Vibration</div>
+                    <label class="toggle-switch"><input type="checkbox" id="vibToggle" checked><span class="toggle-slider"></span></label>
+                </div>
+            </div>
+            <div style="height:16px;"></div>
+            <div class="profile-card">
+                <div class="profile-item" data-action="clearCache">
+                    <div class="profile-item-icon"><span class="material-icons-round">sync</span></div>
+                    <div class="profile-item-info"><div class="profile-item-label">Refresh Cache</div></div>
+                </div>
+                <div class="profile-item" data-action="clearAllData">
+                    <div class="profile-item-icon" style="background:#fee2e2;color:#ef4444;"><span class="material-icons-round">delete_sweep</span></div>
+                    <div class="profile-item-info"><div class="profile-item-label" style="color:#ef4444;">Clear All Data</div></div>
+                </div>
+            </div>
+            <div style="padding: 20px; text-align: center; font-size: 0.75rem; color: var(--text-muted);">
+                <strong>About:</strong> This app is for <strong>educational purposes only</strong>.<br>
+                <span style="margin-top:8px;display:inline-block;font-weight:700;background:var(--primary-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1rem;">🌸 A I S H A 🌸</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS (sub-page of profile) -->
+    <div class="page" id="pageSettings">
+        <div class="detail-header-bar">
+            <button class="detail-back" data-action="navigate" data-page="profile"><span class="material-icons-round">arrow_back</span></button>
+            <div style="font-family:Poppins;font-weight:700;">Settings</div>
+            <div style="width:40px;"></div>
+        </div>
+        <div style="padding:16px;">
+            <div class="profile-card">
+                <div class="settings-toggle">
+                    <div class="settings-toggle-label">Dark Mode</div>
+                    <label class="toggle-switch"><input type="checkbox" id="darkToggle2"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-toggle">
+                    <div class="settings-toggle-label">Snowfall Effect</div>
+                    <label class="toggle-switch"><input type="checkbox" id="snowToggle2" checked><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-toggle">
+                    <div class="settings-toggle-label">Click Vibration</div>
+                    <label class="toggle-switch"><input type="checkbox" id="vibToggle2" checked><span class="toggle-slider"></span></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL -->
+    <div class="page" id="pageDetail">
+        <div class="detail-page">
+            <div class="detail-header-bar">
+                <button class="detail-back" id="detailBack"><span class="material-icons-round">arrow_back</span></button>
+                <div class="detail-actions-top">
+                    <button class="detail-action-btn" id="detailShare"><span class="material-icons-round">share</span></button>
+                    <button class="detail-action-btn" id="detailMore"><span class="material-icons-round">more_vert</span></button>
+                </div>
+            </div>
+            <div id="detailContent"></div>
+            <div class="detail-download-bar" id="detailDownloadBar">
+                <button class="detail-fav-btn" id="detailFavBtn"><span class="material-icons-round">favorite_border</span></button>
+                <a class="detail-download-btn" id="detailDownloadBtn" href="#" target="_blank" style="text-decoration:none;"><span class="material-icons-round">download</span> Download</a>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" data-page="home"><span class="material-icons-round">home</span>Home</button>
+    <button class="nav-item" data-page="categories"><span class="material-icons-round">category</span>Category</button>
+    <button class="nav-item" data-page="favorites"><span class="material-icons-round">favorite</span>Favorites</button>
+    <button class="nav-item" data-page="downloads"><span class="material-icons-round">download</span>Downloads</button>
+    <button class="nav-item" data-page="profile"><span class="material-icons-round">person</span>Profile</button>
+</nav>
 
 <script>
-    const state = { 
-        apps: [], 
-        favorites: JSON.parse(localStorage.getItem('favorites')) || [], 
-        activePage: 'home', 
-        activeLang: localStorage.getItem('language') || 'en',
-        currentItemId: null,
-        currentFilter: 'home',
-        currentPage: 1,
-        itemsPerPage: 12,
+
+// ==================== SAFE HELPERS ====================
+function safeGetJSON(key, fallback) {
+    try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; }
+    catch(e) { console.warn('LS read error', key); return fallback; }
+}
+function safeSetJSON(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) { console.warn('LS write error', key); }
+}
+function safeSetItem(key, val) {
+    try { localStorage.setItem(key, val); } catch(e) { console.warn('LS write error', key); }
+}
+
+// ==================== STATE ====================
+const state = {
+    apps: [],
+    favorites: safeGetJSON('favorites', []),
+    downloads: safeGetJSON('downloads', []),
+    activePage: 'home',
+    prevPage: 'home',
+    activeLang: localStorage.getItem('language') || 'en',
+    currentItemId: null,
+    currentFilter: 'home',
+    currentPage: 1,
+    itemsPerPage: 12,
+    downloadTab: 'downloading'
+};
+
+// ==================== FIREBASE ====================
+let db = null;
+try {
+    const cfg = {
+        apiKey: "AIzaSyDOCrTKIHi0BTeWcdsgV_uAg9ZD6leMDy4",
+        authDomain: "hypermod-caafc.firebaseapp.com",
+        databaseURL: "https://hypermod-caafc-default-rtdb.firebaseio.com",
+        projectId: "hypermod-caafc",
+        storageBucket: "hypermod-caafc.firebasestorage.app",
+        messagingSenderId: "949388328045",
+        appId: "1:949388328045:web:1279367b44dca9d87cd364"
     };
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyDklPQcjXfwKIaOoBHQiJbAIq4PrqR2cxs",
-        authDomain: "premiumappsfree-ac666.firebaseapp.com",
-        databaseURL: "https://premiumappsfree-ac666-default-rtdb.firebaseio.com",
-        projectId: "premiumappsfree-ac666",
-        storageBucket: "premiumappsfree-ac666.appspot.com",
-        messagingSenderId: "406207439410",
-        appId: "1:406207439410:web:b98131982dd86d13de122b"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    
-    const allLanguages = { en: "English", bn: "বাংলা", hi: "हिन्दी", id: "Bahasa Indonesia", ar: "العربية", fr: "Français", tr: "Türkçe", es: "Español", pt: "Português" };
-    const translations = {
-        en: { loading: "Loading a touch of magic...", homeTitle: "Hello, Beautiful!", searchPlaceholder: "Find something special...", defaultCategory: "✨ Must-Haves", download: "Download", settingsTitle: "Settings", langLabel: "Language", aboutLabel: "About App:", aboutDesc: "This application is developed for <strong>educational purposes only</strong>.", joinTelegram: "Join our Telegram", favoritesTitle: "Your Favorites", noFavorites: "You haven't added any favorites yet!", noFavoritesSub: "Tap the ♡ on any app to save it here.", aboutItem: "About this App", requestUpdate: "Request Update", screenshots: "Screenshots", rateThisApp: "Rate this App", yourName: "Your Name", writeReview: "Write a review...", postReview: "Post Review", noReviews: "No reviews yet. Be the first!", darkMode: "Dark Mode", refreshCache: "Refresh Cache", clearAllData: "Clear All Data", soundClicks: "Click Vibration", heartAnimation: "Snowfall Effect", general: "General", data: "Data", latestApps: "Latest Apps", popularApps: "Popular Apps", category: "Category", favorite: "Favorite", cancel: "Cancel", categories: "Categories", appNotFound: "App not found.", noResults: "No results found.", howToDownload: "How to Download", viewOnPlayStore: "View on Play Store", viewOnPlayStoreBtn: "View on Play Store" },
-        bn: { loading: "একটু অপেক্ষা করুন...", homeTitle: "স্বাগতম!", searchPlaceholder: "কিছু খুঁজুন...", defaultCategory: "✨ প্রয়োজনীয়", download: "ডাউনলোড", settingsTitle: "সেটিংস", langLabel: "ভাষা", aboutLabel: "অ্যাপ সম্পর্কে:", aboutDesc: "এই অ্যাপ্লিকেশনটি শুধুমাত্র <strong>শিক্ষামূলক উদ্দেশ্যে</strong> তৈরি করা হয়েছে।", joinTelegram: "টেলিগ্রামে যোগ দিন", favoritesTitle: "আপনার পছন্দের তালিকা", noFavorites: "আপনি এখনো পছন্দের কিছু যোগ করেননি!", noFavoritesSub: "যেকোনো অ্যাপে ♡ ট্যাপ করে এখানে সেভ করুন।", aboutItem: "এই অ্যাপ সম্পর্কে", requestUpdate: "আপডেটের জন্য অনুরোধ", screenshots: "স্ক্রিনশট", rateThisApp: "অ্যাপটি রেট দিন", yourName: "আপনার নাম", writeReview: "রিভিউ লিখুন...", postReview: "রিভিউ পোস্ট করুন", noReviews: "এখনো কোনো রিভিউ নেই। প্রথম রিভিউটি আপনি দিন!", darkMode: "ডার্ক মোড", refreshCache: "ক্যাশে রিফ্রেশ করুন", clearAllData: "সমস্ত ডেটা মুছুন", soundClicks: "ক্লিক ভাইব্রেশন", heartAnimation: "তুষারপাত ইফেক্ট", general: "সাধারণ", data: "ডেটা", latestApps: "সর্বশেষ অ্যাপস", popularApps: "জনপ্রিয় অ্যাপস", category: "ক্যাটাগরি", favorite: "পছন্দের", cancel: "বাতিল", categories: "ক্যাটাগরি সমূহ", appNotFound: "অ্যাপ খুঁজে পাওয়া যায়নি।", noResults: "কোনো ফলাফল পাওয়া যায়নি।", howToDownload: "কিভাবে ডাউনলোড করবেন", viewOnPlayStore: "প্লে স্টোরে দেখুন", viewOnPlayStoreBtn: "প্লে স্টোরে দেখুন" }
-    };
-    
-    Object.keys(allLanguages).forEach(langCode => { if (!translations[langCode]) { translations[langCode] = translations.en; } const langObject = translations[langCode]; for (const key in translations.en) { if (!langObject[key]) { langObject[key] = translations.en[key]; } }});
-    const t = (key) => translations[state.activeLang]?.[key] || translations.en[key];
-
-    let DOMElements = {}; // Init empty, populate later
-
-    // --- SCROLL ANIMATION OBSERVER ---
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active-scroll');
-            } else {
-                // FIXED: Removing class when it leaves view so it animates AGAIN when scrolling back
-                entry.target.classList.remove('active-scroll');
-            }
-        });
-    }, { threshold: 0.1 }); // Trigger when 10% visible
-
-    function observeCards() {
-        document.querySelectorAll('.app-card').forEach(card => scrollObserver.observe(card));
+    if (typeof firebase !== 'undefined') {
+        if (!firebase.apps.length) firebase.initializeApp(cfg);
+        db = firebase.database();
     }
+} catch(e) { console.error('Firebase init error:', e); }
 
-    function createAppCardNode(app) {
-        const card = document.createElement('div');
-        card.className = 'app-card ripple'; // CSS handles initial opacity
-        card.dataset.id = app.id;
+// ==================== TRANSLATIONS ====================
+const allLanguages = { en: "English", bn: "বাংলা", hi: "हिन्दी", id: "Bahasa Indonesia", ar: "العربية", fr: "Français", tr: "Türkçe", es: "Español", pt: "Português" };
+const translations = {
+    en: { homeTitle: "Welcome to Your Mods!", searchPlaceholder: "Search apps, games...", defaultCategory: "✨ Must-Haves", download: "Download", settingsTitle: "Settings", langLabel: "Language", aboutLabel: "About App:", aboutDesc: "This application is developed for educational purposes only.", joinTelegram: "Join our Telegram", favoritesTitle: "Your Favorites", noFavorites: "No favorites yet", noFavoritesSub: "Tap the heart on any app to save it here.", aboutItem: "MOD Features", requestUpdate: "Request Update", screenshots: "Screenshots", rateThisApp: "Rate this App", latestApps: "Latest Apps", popularApps: "Popular Apps", category: "Category", favorite: "Favorite", cancel: "Cancel", categories: "Categories", appNotFound: "App not found.", noResults: "No results found.", howToDownload: "How to Download", viewOnPlayStore: "View on Play Store", downloads: "Downloads", completed: "Completed", downloading: "Downloading", profile: "Profile", darkMode: "Dark Mode", refreshCache: "Refresh Cache", clearAllData: "Clear All Data", soundClicks: "Click Vibration", heartAnimation: "Snowfall Effect", general: "General", data: "Data" },
+    bn: { homeTitle: "আপনার মোডে স্বাগতম!", searchPlaceholder: "অ্যাপ খুঁজুন...", defaultCategory: "✨ প্রয়োজনীয়", download: "ডাউনলোড", settingsTitle: "সেটিংস", langLabel: "ভাষা", aboutLabel: "অ্যাপ সম্পর্কে:", aboutDesc: "এই অ্যাপ্লিকেশনটি শুধুমাত্র শিক্ষামূলক উদ্দেশ্যে তৈরি।", joinTelegram: "টেলিগ্রামে যোগ দিন", favoritesTitle: "পছন্দের তালিকা", noFavorites: "কোনো পছন্দ নেই", noFavoritesSub: "যেকোনো অ্যাপে হার্ট ট্যাপ করুন।", aboutItem: "MOD ফিচারস", requestUpdate: "আপডেটের অনুরোধ", screenshots: "স্ক্রিনশট", rateThisApp: "রেট দিন", latestApps: "সর্বশেষ", popularApps: "জনপ্রিয়", category: "ক্যাটাগরি", favorite: "পছন্দ", cancel: "বাতিল", categories: "ক্যাটাগরি", appNotFound: "অ্যাপ পাওয়া যায়নি।", noResults: "কোনো ফলাফল নেই।", howToDownload: "কিভাবে ডাউনলোড করবেন", viewOnPlayStore: "প্লে স্টোর", downloads: "ডাউনলোড", completed: "সম্পন্ন", downloading: "ডাউনলোড হচ্ছে", profile: "প্রোফাইল", darkMode: "ডার্ক মোড", refreshCache: "ক্যাশে রিফ্রেশ", clearAllData: "সব ডেটা মুছুন", soundClicks: "ভাইব্রেশন", heartAnimation: "তুষারপাত", general: "সাধারণ", data: "ডেটা" }
+};
+Object.keys(allLanguages).forEach(lc => {
+    if (!translations[lc]) translations[lc] = translations.en;
+    for (const k in translations.en) if (!translations[lc][k]) translations[lc][k] = translations.en[k];
+});
+const t = (k) => translations[state.activeLang]?.[k] || translations.en[k];
+
+// ==================== DOM REFS ====================
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+// ==================== RENDERERS ====================
+function renderPopular() {
+    const container = $('#popularCarousel');
+    const popular = state.apps.filter(a => a.isPremium || a.isHot).slice(0, 10);
+    if (!popular.length) { container.innerHTML = ''; return; }
+    container.innerHTML = popular.map(app => `
+        <div class="popular-card" data-id="${app.id}">
+            <div class="popular-card-img">
+                <img src="${app.img || 'https://i.ibb.co/68Z2pL4/placeholder.png'}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png'" alt="${app.name}">
+                ${app.isPremium ? '<div class="popular-card-badge">MOD</div>' : ''}
+            </div>
+            <div class="popular-card-name">${app.name}</div>
+            <div class="popular-card-meta">v${app.version || '1.0'}</div>
+        </div>`).join('');
+}
+
+function renderAppList(apps) {
+    const container = $('#appList');
+    if (!apps.length) { container.innerHTML = `<div class="empty-state"><span class="material-icons-round">apps</span><h3>No apps</h3></div>`; return; }
+    container.innerHTML = apps.map(app => {
         const rating = app.averageRating ? app.averageRating.toFixed(1) : (app.rating || 0);
-        card.innerHTML = `<img class="app-card-icon" src="${app.img}" loading="lazy" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png';"><h4 class="app-name">${app.name}</h4><div class="app-meta">${rating} ★ | v${app.version || 'N/A'} | ${app.size || ''}</div>`;
-        return card;
-    }
-
-    function updateAppGrid(apps) {
-        DOMElements.home.appGrid.innerHTML = ''; 
-        const fragment = document.createDocumentFragment();
-        apps.forEach(app => fragment.appendChild(createAppCardNode(app)));
-        DOMElements.home.appGrid.appendChild(fragment);
-        // Trigger Animation Observation
-        observeCards();
-    }
-    
-    function updatePagination(totalItems) {
-        const totalPages = Math.ceil(totalItems / state.itemsPerPage);
-        const paginationContainer = DOMElements.home.pagination;
-        paginationContainer.innerHTML = '';
-        if (totalPages <= 1) return;
-        
-        let paginationHTML = '';
-        for (let i = 1; i <= totalPages; i++) {
-            paginationHTML += `<button class="page-link ripple ${i === state.currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
-        }
-        paginationContainer.innerHTML = paginationHTML;
-    }
-
-    function renderHomePage() {
-        const popularApps = state.apps.filter(app => app.isPremium === true || app.isHot === true);
-        DOMElements.home.popularCarousel.innerHTML = (popularApps.length > 0 && state.currentFilter === 'home')
-            ? `<h2 class="section-title">${t('popularApps')}</h2><div class="popular-carousel">${popularApps.map(createPopularCardHTML).join('')}</div>`
-            : '';
-
-        const filteredApps = state.currentFilter === 'home' 
-            ? state.apps 
-            : state.apps.filter(app => (app.category || t('defaultCategory')) === state.currentFilter);
-
-        DOMElements.home.pageTitle.textContent = state.currentFilter === 'home' ? t('latestApps') : `${t('category')}: ${state.currentFilter}`;
-        
-        const startIndex = (state.currentPage - 1) * state.itemsPerPage;
-        const paginatedApps = filteredApps.slice(startIndex, startIndex + state.itemsPerPage);
-
-        updateAppGrid(paginatedApps);
-        updatePagination(filteredApps.length);
-    }
-    
-    function preRenderSettingsPage() {
-        const settingsHTML = `
-            <header class="settings-header"><h1 class="welcome-title">${t('settingsTitle')}</h1></header>
-            <main class="settings-main">
-                <div class="settings-group"><h3 class="settings-group-title">${t('general')}</h3><div class="settings-card"><div class="settings-item ripple" data-action="openLanguageModal"><div class="settings-item-icon grad-1"><i class="material-icons-round">language</i></div><p class="settings-item-label">${t('langLabel')}</p><div class="settings-item-control"><span id="current-lang-label">${allLanguages[state.activeLang]}</span><i class="material-icons-round">chevron_right</i></div></div><div class="settings-item"><div class="settings-item-icon grad-2"><i class="material-icons-round">brightness_4</i></div><p class="settings-item-label">${t('darkMode')}</p><label class="switch"><input type="checkbox" id="darkModeToggle" ${document.body.classList.contains('dark-mode') ? 'checked' : ''}><span class="slider"></span></label></div><div class="settings-item"><div class="settings-item-icon grad-2"><i class="material-icons-round">vibration</i></div><p class="settings-item-label">${t('soundClicks')}</p><label class="switch"><input type="checkbox" id="soundOnClickToggle" ${localStorage.getItem('soundOnClick') === 'true' ? 'checked' : ''}><span class="slider"></span></label></div><div class="settings-item"><div class="settings-item-icon grad-3"><i class="material-icons-round">ac_unit</i></div><p class="settings-item-label">${t('heartAnimation')}</p><label class="switch"><input type="checkbox" id="heartAnimationToggle" ${localStorage.getItem('heartAnimation') !== 'false' ? 'checked' : ''}><span class="slider"></span></label></div></div></div>
-                <div class="settings-group"><h3 class="settings-group-title">${t('data')}</h3><div class="settings-card"><div class="settings-item ripple" data-action="clearCache"><div class="settings-item-icon grad-3"><i class="material-icons-round">sync</i></div><p class="settings-item-label">${t('refreshCache')}</p></div><div class="settings-item ripple" data-action="clearAllData"><div class="settings-item-icon grad-4"><i class="material-icons-round">delete_sweep</i></div><p class="settings-item-label">${t('clearAllData')}</p></div></div></div>
-                <div class="settings-group"><div class="settings-card"><div style="padding: 16px 20px; font-size: 14px; text-align: justify;"><strong>${t('aboutLabel')}</strong> <span>${t('aboutDesc')}</span><br><br><a href="https://t.me/+NHsqBBMg1NMxMmY1" class="btn btn-primary ripple" style="width:100%; margin-top:10px;" target="_blank">${t('joinTelegram')}</a></div></div></div>
-            </main>`;
-        DOMElements.pages.settings.innerHTML = settingsHTML;
-    }
-
-    function renderFavoritesPage() {
-        const favApps = state.apps.filter(app => state.favorites.includes(app.id));
-        DOMElements.pages.favorites.innerHTML = `
-            <header class="favorites-header"><h1 class="welcome-title">${t('favoritesTitle')}</h1></header>
-            <main class="favorites-main">
-                ${favApps.length > 0 ? `<div class="app-grid">${favApps.map(app => createAppCardNode(app).outerHTML).join('')}</div>` : `<div style="text-align:center; padding: 50px 20px; color: var(--text-secondary);"><i class="material-icons-round" style="font-size: 4rem;">favorite_border</i><h2>${t('noFavorites')}</h2><p>${t('noFavoritesSub')}</p></div>`}
-            </main>`;
-        if(favApps.length > 0) observeCards(); // Animate favorites too
-    }
-
-    function renderDetailPage(itemId) {
-        const page = DOMElements.pages.details;
-        const item = state.apps.find(a => String(a.id) === String(itemId));
-        if (!item) { page.innerHTML = `<p>${t('appNotFound')}</p>`; return; }
-
-        const reviews = Array.isArray(item.reviews) ? item.reviews : [];
-        const avgRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + Number(r.rating), 0) / reviews.length).toFixed(1) : (item.averageRating || item.rating || 0);
-        
-        let descListHTML = '';
-        const rawDesc = item.desc || item.description;
-
-        if (Array.isArray(rawDesc)) {
-            descListHTML = rawDesc.map(d => `<li><span class="material-icons-round">check_circle</span><span>${d}</span></li>`).join('');
-        } else if (typeof rawDesc === 'string') {
-             descListHTML = `<li><span class="material-icons-round">info</span><span>${rawDesc}</span></li>`;
-        } else {
-             descListHTML = `<li><span class="material-icons-round">info</span><span>No description available.</span></li>`;
-        }
-        
-        const screenshotHTML = (item.screenshots && item.screenshots.length > 0) ? `<div class="detail-section-content"><h4 class="subtitle">${t('screenshots')}</h4><div class="screenshot-gallery">${item.screenshots.map((ss, i) => `<img src="${ss}" class="screenshot-img" data-index="${i}" loading="lazy">`).join('')}</div></div>` : '';
-        const isFav = state.favorites.includes(item.id);
-        
-        const playStoreButtonHTML = item.playStoreLink ? `
-            <a href="${item.playStoreLink}" target="_blank" class="btn btn-secondary ripple" style="background-color: #e8f5e9; color: #2e7d32;">
-                <img src="https://i.ibb.co/MkpD3Bqq/5d0b0403257ac6cde82fa20c08ec83bea1d4b6ccd406fefdb1672717881c1a7a-200.webp" class="blink-live" style="width: 24px; height: 24px; object-fit: contain;" alt="Play Store">
-                <span>${t('viewOnPlayStoreBtn')}</span>
-            </a>` : '';
-        
-        page.innerHTML = `
-            <div>
-                <div class="detail-header"><button class="btn-back ripple" data-action="goBack"><span class="material-icons-round">arrow_back</span></button><h2 class="detail-title">${item.name}</h2></div>
-                <div style="padding: 0 16px;">
-                    <div class="detail-card"><img id="detailAppImage" src="${item.img}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png';"><div class="detail-info"><h3 id="detailAppName">${item.name}</h3><p id="detailAppCategory">${item.category} • v${item.version || 'N/A'} • ${item.size || ''}</p><div id="detailStarRating"><span class="stars">${'★'.repeat(Math.round(avgRating))}${'☆'.repeat(5 - Math.round(avgRating))}</span>&nbsp;(${avgRating})</div></div></div>
-                    
-                    <div class="detail-actions">
-                        <a href="${item.link}" target="_blank" class="btn btn-primary ripple">
-                            <span class="material-icons-round blink-live">download</span>
-                            <span>${t('download')}</span>
-                        </a>
-                        <a href="https://player.vimeo.com/video/1143742272" target="_blank" class="btn btn-secondary ripple">
-                            <span class="material-icons-round blink-live">play_circle_outline</span>
-                            <span>${t('howToDownload')}</span>
-                        </a>
-                        ${playStoreButtonHTML}
-                        <button id="favBtn" class="btn btn-secondary ripple" data-action="toggleFavorite" data-id="${item.id}"><span class="material-icons-round">${isFav ? 'favorite' : 'favorite_border'}</span><span>${t('favorite')}</span></button>
-                        <a href="https://t.me/+NHsqBBMg1NMxMmY1" target="_blank" class="btn btn-secondary ripple"><span class="material-icons-round">sync</span><span>${t('requestUpdate')}</span></a>
-                    </div>
-
-                    <div class="user-rating-section">
-                         <h4 class="subtitle" style="margin-bottom:0; font-size:1.2rem;">${t('rateThisApp')}</h4>
-                         <div class="rating-stars">
-                             <span class="material-icons-round rating-star-btn ripple" data-action="rateApp" data-score="1" data-id="${item.id}">star_border</span>
-                             <span class="material-icons-round rating-star-btn ripple" data-action="rateApp" data-score="2" data-id="${item.id}">star_border</span>
-                             <span class="material-icons-round rating-star-btn ripple" data-action="rateApp" data-score="3" data-id="${item.id}">star_border</span>
-                             <span class="material-icons-round rating-star-btn ripple" data-action="rateApp" data-score="4" data-id="${item.id}">star_border</span>
-                             <span class="material-icons-round rating-star-btn ripple" data-action="rateApp" data-score="5" data-id="${item.id}">star_border</span>
-                         </div>
-                    </div>
-
-                    <div class="detail-section-content" style="margin-top:25px;"><h4 class="subtitle">${t('aboutItem')}</h4><div id="detailAppDescContainer"><ul>${descListHTML}</ul></div></div>
-                    ${screenshotHTML}
+        const downloads = app.downloads || app.downloadCount || '0';
+        return `
+        <div class="app-list-item" data-id="${app.id}">
+            <img class="app-list-icon" src="${app.img || 'https://i.ibb.co/68Z2pL4/placeholder.png'}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png'" alt="">
+            <div class="app-list-info">
+                <div class="app-list-name">${app.name} ${app.isPremium ? '<span class="app-list-badge">MOD</span>' : ''}</div>
+                <div class="app-list-meta">
+                    <span class="star">★</span> ${rating} &bull; v${app.version || 'N/A'} &bull; ${app.size || ''}${app.downloads ? " &bull; " + app.downloads + "+" : ""}
                 </div>
-            </div>`;
+            </div>
+            <button class="app-list-download" data-action="quickDownload" data-id="${app.id}"><span class="material-icons-round">download</span></button>
+        </div>`;
+    }).join('');
+}
+
+function renderPagination(total) {
+    const pages = Math.ceil(total / state.itemsPerPage);
+    const wrap = $('#paginationWrap');
+    if (pages <= 1) { wrap.innerHTML = ''; return; }
+    let html = '';
+    for (let i = 1; i <= pages; i++) {
+        html += `<button style="width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:${i===state.currentPage?'var(--primary-gradient)':'var(--surface)'};color:${i===state.currentPage?'white':'var(--text-secondary)'};font-weight:700;cursor:pointer;" data-action="changePage" data-page="${i}">${i}</button>`;
+    }
+    wrap.innerHTML = html;
+}
+
+function renderHome() {
+    renderPopular();
+    const filtered = state.currentFilter === 'home' ? state.apps : state.apps.filter(a => (a.category || t('defaultCategory')) === state.currentFilter);
+    const start = (state.currentPage - 1) * state.itemsPerPage;
+    renderAppList(filtered.slice(start, start + state.itemsPerPage));
+    renderPagination(filtered.length);
+}
+
+function renderCategories() {
+    const cats = ['Games','Apps','Premium','Tools','AI Apps','Emulators','Entertainment','Social'];
+    const icons = { Games:'sports_esports', Apps:'apps', Premium:'workspace_premium', Tools:'build', 'AI Apps':'psychology', Emulators:'videogame_asset', Entertainment:'movie', Social:'group' };
+    const counts = {};
+    state.apps.forEach(a => { const c = a.category || 'Apps'; counts[c] = (counts[c]||0)+1; });
+    $('#categoryGrid').innerHTML = cats.map(cat => `
+        <div class="category-card" data-action="filterCategory" data-cat="${cat}">
+            <div class="category-icon"><span class="material-icons-round">${icons[cat]||'apps'}</span></div>
+            <div class="category-name">${cat}</div>
+            <div class="category-count">${counts[cat]||0}+ Mods</div>
+        </div>`).join('');
+}
+
+function renderFavorites() {
+    const favApps = state.apps.filter(a => state.favorites.includes(String(a.id)));
+    const container = $('#favoritesList');
+    if (!favApps.length) {
+        container.innerHTML = `<div class="empty-state"><span class="material-icons-round">favorite_border</span><h3>${t('noFavorites')}</h3><p>${t('noFavoritesSub')}</p></div>`;
+        return;
+    }
+    container.innerHTML = favApps.map(app => `
+        <div class="fav-list-item" data-id="${app.id}">
+            <img class="fav-list-icon" src="${app.img || 'https://i.ibb.co/68Z2pL4/placeholder.png'}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png'">
+            <div class="fav-list-info">
+                <div class="fav-list-name">${app.name}</div>
+                <div class="fav-list-meta">v${app.version||'N/A'} &bull; ${app.size||''}</div>
+            </div>
+            <span class="material-icons-round fav-heart">favorite</span>
+        </div>`).join('');
+}
+
+function renderDownloads() {
+    const container = $('#downloadsList');
+    const items = state.downloads.filter(d => state.downloadTab === 'downloading' ? d.status !== 'completed' : d.status === 'completed');
+    if (!items.length) {
+        container.innerHTML = `<div class="empty-state"><span class="material-icons-round">download_done</span><h3>No ${state.downloadTab} items</h3></div>`;
+        return;
+    }
+    container.innerHTML = items.map(d => {
+        const app = state.apps.find(a => String(a.id) === String(d.appId)) || {};
+        const pct = d.progress || 0;
+        return `
+        <div class="download-item">
+            <div class="download-top">
+                <img class="download-icon" src="${app.img || 'https://i.ibb.co/68Z2pL4/placeholder.png'}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png'">
+                <div class="download-info">
+                    <div class="download-name">${app.name || 'Unknown'}</div>
+                    <div class="download-sub">${d.status === 'completed' ? 'Completed' : (d.speed || '2.4 MB/s')}</div>
+                </div>
+                <div class="download-actions">
+                    ${d.status === 'completed' 
+                        ? `<button class="download-btn" data-action="installDownload" data-did="${d.id}"><span class="material-icons-round">install_mobile</span></button>`
+                        : `<button class="download-btn" data-action="pauseDownload" data-did="${d.id}"><span class="material-icons-round">pause</span></button>`}
+                    <button class="download-btn" data-action="removeDownload" data-did="${d.id}"><span class="material-icons-round">close</span></button>
+                </div>
+            </div>
+            <div class="download-progress-bg"><div class="download-progress-fill" style="width:${pct}%"></div></div>
+            <div class="download-status"><span>${pct}%</span><span>${d.status === 'completed' ? 'Done' : 'Downloading...'}</span></div>
+        </div>`;
+    }).join('');
+}
+
+function renderDetail(id) {
+    const item = state.apps.find(a => String(a.id) === String(id));
+    if (!item) { $('#detailContent').innerHTML = `<div style="padding:40px;text-align:center;">${t('appNotFound')}</div>`; return; }
+    state.currentItemId = id;
+
+    let reviews = [];
+    if (item.reviews) {
+        if (Array.isArray(item.reviews)) reviews = item.reviews;
+        else if (typeof item.reviews === 'object') reviews = Object.values(item.reviews);
+    }
+    const avg = reviews.length ? (reviews.reduce((s,r) => s + Number(r.rating||0), 0) / reviews.length).toFixed(1) : (item.averageRating || item.rating || 0);
+
+    let features = [];
+    const raw = item.desc || item.description;
+    if (Array.isArray(raw)) features = raw;
+    else if (typeof raw === 'string') features = [raw];
+    else features = ['No description available.'];
+
+    let screenshots = [];
+    if (item.screenshots) {
+        if (Array.isArray(item.screenshots)) screenshots = item.screenshots;
+        else if (typeof item.screenshots === 'object') screenshots = Object.values(item.screenshots);
     }
 
-    function setActivePage(pageName) {
-        state.activePage = pageName;
-        state.currentItemId = null;
+    const isFav = state.favorites.includes(String(item.id));
+    const downloadCount = item.downloads || item.downloadCount || '12.5K';
 
-        for (const page in DOMElements.pages) {
-            DOMElements.pages[page].classList.add('hidden');
-        }
-        DOMElements.pages[pageName].classList.remove('hidden');
+    $('#detailContent').innerHTML = `
+        <div class="detail-hero">
+            <img class="detail-icon" src="${item.img || 'https://i.ibb.co/68Z2pL4/placeholder.png'}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png'">
+            <div class="detail-hero-info">
+                <div class="detail-name">${item.name} ${item.isPremium ? '<span class="detail-mod-badge">MOD</span>' : ''}</div>
+                <div class="detail-dev">${item.developer || 'By HyperMod Team'}</div>
+                <div class="detail-version">v${item.version || 'N/A'} • ${item.category || 'App'}${item.size ? ' • ' + item.size : ''}</div>
+            </div>
+        </div>
+        <div class="detail-stats">
+            <div class="detail-stat"><div class="detail-stat-value">${avg}</div><div class="detail-stat-label">★ Rating</div></div>
+            <div class="detail-stat"><div class="detail-stat-value">${downloadCount}</div><div class="detail-stat-label">Downloads</div></div>
+            <div class="detail-stat"><div class="detail-stat-value">${item.size || 'N/A'}</div><div class="detail-stat-label">Size</div></div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">${t('aboutItem')}</div>
+            <div class="detail-features">
+                ${features.map(f => `<div class="detail-feature-item"><span class="material-icons-round">check_circle</span>${f}</div>`).join('')}
+            </div>
+        </div>
+        ${item.playStoreLink ? `
+        <div class="detail-section">
+            <a href="${item.playStoreLink}" target="_blank" class="detail-download-btn" style="background:#e8f5e9;color:#2e7d32;display:flex;gap:8px;text-decoration:none;">
+                <img src="https://i.ibb.co/MkpD3Bqq/5d0b0403257ac6cde82fa20c08ec83bea1d4b6ccd406fefdb1672717881c1a7a-200.webp" style="width:22px;height:22px;object-fit:contain;" alt="Play Store">
+                ${t('viewOnPlayStore')}
+            </a>
+        </div>` : ''}
+        <div class="detail-section">
+            <a href="https://player.vimeo.com/video/1143742272" target="_blank" class="detail-download-btn" style="background:var(--surface-2);color:var(--text-primary);display:flex;gap:8px;text-decoration:none;border:1px solid var(--border);">
+                <span class="material-icons-round">play_circle_outline</span>
+                ${t('howToDownload')}
+            </a>
+        </div>
+        ${screenshots.length ? `
+        <div class="detail-section">
+            <div class="detail-section-title">${t('screenshots')}</div>
+            <div class="screenshot-scroll hide-scroll">
+                ${screenshots.map((s,i) => `<img class="screenshot-thumb" src="${s}" data-index="${i}" loading="lazy">`).join('')}
+            </div>
+        </div>` : ''}
+        <div class="detail-section">
+            <div class="detail-section-title">${t('rateThisApp')}</div>
+            <div class="detail-rating">
+                <div class="rating-stars" id="ratingStars">
+                    ${[1,2,3,4,5].map(s => `<span class="material-icons-round rating-star" data-score="${s}">star_border</span>`).join('')}
+                </div>
+            </div>
+        </div>
+        <div style="height:100px;"></div>
+    `;
 
-        const showHeader = (pageName === 'home' || pageName === 'favorites' || pageName === 'settings');
-        DOMElements.header.classList.toggle('hidden', !showHeader);
-        DOMElements.bottomNav.classList.remove('hidden');
-
-        if (pageName === 'home') DOMElements.welcomeTitle.textContent = t('homeTitle');
-        if (pageName === 'favorites') DOMElements.welcomeTitle.textContent = t('favoritesTitle');
-        if (pageName === 'settings') DOMElements.welcomeTitle.textContent = t('settingsTitle');
-
-        if (pageName === 'home') renderHomePage();
-        if (pageName === 'favorites') renderFavoritesPage();
-
-        updateBottomNav();
-        window.scrollTo(0, 0);
-    }
-    
-    function showItemDetail(itemId) {
-        state.currentItemId = itemId;
-        for (const page in DOMElements.pages) {
-            DOMElements.pages[page].classList.add('hidden');
-        }
-        DOMElements.pages.details.classList.remove('hidden');
-        DOMElements.header.classList.add('hidden');
-        DOMElements.bottomNav.classList.add('hidden');
-        renderDetailPage(itemId);
-        window.scrollTo(0, 0);
-    }
-    
-    function updateBottomNav() {
-        DOMElements.bottomNav.innerHTML = `
-            <div class="nav-item ripple ${state.activePage==='home'?'active':''}" data-page="home"><i class="material-icons-round">home</i></div>
-            <div class="nav-item ripple ${state.activePage==='favorites'?'active':''}" data-page="favorites"><i class="material-icons-round">favorite</i></div>
-            <div class="nav-item ripple ${state.activePage==='settings'?'active':''}" data-page="settings"><i class="material-icons-round">tune</i></div>
-        `;
-    }
-    
-    const actions = {
-        goBack: () => setActivePage(state.activePage),
-        navigate: (page) => {
-            if (state.activePage === page && state.currentFilter === 'home') return;
-            state.currentFilter = 'home';
-            state.currentPage = 1;
-            setActivePage(page);
-        },
-        changePage: (pageNumber) => {
-            state.currentPage = pageNumber;
-            renderHomePage();
-            window.scrollTo(0, 0);
-        },
-        filterByCategory: (category) => {
-            toggleMenu();
-            state.currentPage = 1;
-            state.currentFilter = category;
-            setActivePage('home');
-        },
-        toggleFavorite: (id) => {
-            const favIndex = state.favorites.indexOf(id);
-            if (favIndex > -1) state.favorites.splice(favIndex, 1);
-            else state.favorites.push(id);
-            localStorage.setItem('favorites', JSON.stringify(state.favorites));
-
-            const favBtn = document.getElementById('favBtn');
-            if (favBtn) {
-                favBtn.querySelector('.material-icons-round').textContent = state.favorites.includes(id) ? 'favorite' : 'favorite_border';
-            }
-            if (state.activePage === 'favorites') renderFavoritesPage();
-        },
-        toggleDarkMode: (isChecked) => {
-            document.body.classList.toggle('dark-mode', isChecked);
-            localStorage.setItem('darkMode', isChecked);
-        },
-        toggleSound: (isChecked) => {
-            localStorage.setItem('soundOnClick', isChecked);
-        },
-        toggleHeartAnimation: (isChecked) => {
-            localStorage.setItem('heartAnimation', isChecked);
-            location.reload(); 
-        },
-        clearCache: () => {
-            localStorage.removeItem('apps_cache');
-            localStorage.removeItem('apps_timestamp');
-            alert('Cache cleared. The app will now reload.');
-            location.reload();
-        },
-        clearAllData: () => {
-            localStorage.clear();
-            alert('All local data cleared. The app will now reload.');
-            location.reload();
-        },
-        openLanguageModal: () => {
-            const modal = DOMElements.languageModal;
-            modal.title.textContent = t('langLabel');
-            modal.body.innerHTML = Object.entries(allLanguages).map(([code, name]) => `<div class="lang-option ripple ${code === state.activeLang ? 'active' : ''}" data-lang="${code}"><span>${name}</span></div>`).join('');
-            modal.container.classList.remove('hidden');
-            modal.container.style.display = 'flex';
-        },
-        closeLanguageModal: () => {
-            DOMElements.languageModal.container.style.display = 'none';
-        },
-        changeLanguage: (lang) => {
-            state.activeLang = lang;
-            localStorage.setItem('language', lang);
-            location.reload();
-        },
-        rateApp: (id) => {
-            const target = event.target;
-            const score = parseInt(target.dataset.score);
-            const stars = target.parentElement.children;
-            for(let i=0; i<stars.length; i++) {
-                if (i < score) {
-                    stars[i].innerText = 'star';
-                    stars[i].classList.add('selected');
-                } else {
-                    stars[i].innerText = 'star_border';
-                    stars[i].classList.remove('selected');
-                }
-            }
-            const newReview = { rating: score, timestamp: Date.now() };
-            db.ref('apps/' + id + '/reviews').push(newReview).then(() => {
-                const toast = document.getElementById('notificationToast');
-                const notifMsg = document.getElementById('notifMessage');
-                notifMsg.textContent = "Thanks for your rating!";
-                document.getElementById('notifImage').src = 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png';
-                toast.classList.add('active');
-                setTimeout(() => toast.classList.remove('active'), 3000);
-            }).catch(e => console.error("Rating error", e));
-        }
+    $('#detailFavBtn').innerHTML = `<span class="material-icons-round">${isFav ? 'favorite' : 'favorite_border'}</span>`;
+    $('#detailFavBtn').classList.toggle('active', isFav);
+    // Set actual download link - opens in browser
+    $('#detailDownloadBtn').href = item.link || '#';
+    $('#detailDownloadBtn').onclick = (e) => { startDownload(item.id); };
+    $('#detailFavBtn').onclick = () => toggleFavorite(item.id);
+    $('#detailBack').onclick = () => goBack();
+    $('#detailShare').onclick = () => {
+        if (navigator.share) navigator.share({ title: item.name, url: item.link || location.href }).catch(()=>{});
     };
 
-    function toggleMenu() {
-        DOMElements.menu.brand.textContent = t('categories');
-        DOMElements.menu.container.classList.toggle('active');
-        DOMElements.menu.overlay.classList.toggle('active');
-        document.body.classList.toggle('no-scroll');
-
-        if (DOMElements.menu.container.classList.contains('active')) {
-            const items = document.querySelectorAll('.side-menu-nav-item');
-            items.forEach((item, index) => {
-                item.style.animation = 'none';
-                item.offsetHeight;
-                item.style.animation = `menuSlideIn 0.4s ease forwards ${index * 0.05}s`;
-            });
-        }
-    }
-
-    function toggleSearch() {
-        const overlay = DOMElements.search.overlay;
-        overlay.classList.toggle('active');
-        document.body.classList.toggle('no-scroll');
-        if (overlay.classList.contains('active')) {
-            DOMElements.search.label.textContent = t('searchPlaceholder');
-            DOMElements.search.closeBtn.textContent = t('cancel');
-            DOMElements.search.input.focus();
-        }
-    }
-
-    function showLightbox(index) {
-        const item = state.apps.find(a => String(a.id) === String(state.currentItemId));
-        if (!item || !item.screenshots || !item.screenshots.length) return;
-        DOMElements.lightbox.image.src = item.screenshots[parseInt(index)];
-        DOMElements.lightbox.overlay.classList.add('active');
-        document.body.classList.add('no-scroll');
-    }
-
-    function hideLightbox() {
-        DOMElements.lightbox.overlay.classList.remove('active');
-        document.body.classList.remove('no-scroll');
-    }
-
-    function createSideNav() {
-        const getCategoryIcon = (cat) => ({ 'Game': 'sports_esports', 'Video': 'movie', 'Photo': 'photo_camera', 'Tool': 'build', 'Social': 'group' }[cat] || 'apps');
-        const categories = ['home', ...new Set(state.apps.map(app => app.category || t('defaultCategory')).filter(Boolean))];
-        DOMElements.menu.nav.innerHTML = categories.map(cat => `
-            <div class="side-menu-nav-item ripple" data-category="${cat}">
-                <span class="material-icons-round">${cat === 'home' ? 'home' : getCategoryIcon(cat)}</span>
-                <span>${cat === 'home' ? t('latestApps') : cat}</span>
-            </div>`).join('');
-    }
-    
-    function setupGlobalEventListeners() {
-        document.addEventListener('click', (e) => {
-            const wave = document.createElement('div');
-            wave.classList.add('click-wave');
-            document.body.appendChild(wave);
-            const size = 100;
-            wave.style.width = size + 'px';
-            wave.style.height = size + 'px';
-            wave.style.left = (e.clientX - size/2) + 'px';
-            wave.style.top = (e.clientY - size/2) + 'px';
-
-            setTimeout(() => { wave.remove(); }, 600);
-
-            if (localStorage.getItem('soundOnClick') === 'true' && navigator.vibrate) {
-                navigator.vibrate(10);
-            }
-
-            const navItem = e.target.closest('.nav-item[data-page]');
-            if (navItem) { actions.navigate(navItem.dataset.page); return; }
-
-            const appCard = e.target.closest('.app-card, .popular-card-item');
-            if (appCard) { showItemDetail(appCard.dataset.id); return; }
-
-            const pageLink = e.target.closest('.page-link[data-page]');
-            if(pageLink) { actions.changePage(parseInt(pageLink.dataset.page)); return; }
-            
-            const categoryItem = e.target.closest('.side-menu-nav-item[data-category]');
-            if(categoryItem) { actions.filterByCategory(categoryItem.dataset.category); return; }
-
-            const langOption = e.target.closest('.lang-option[data-lang]');
-            if (langOption) { actions.changeLanguage(langOption.dataset.lang); return; }
-            
-            const actionTarget = e.target.closest('[data-action]');
-            if(actionTarget) {
-                const action = actionTarget.dataset.action;
-                const id = actionTarget.dataset.id;
-                if (actions[action]) actions[action](id);
-                return;
-            }
-
-            if (e.target.closest('.header-logo-container') || e.target.closest('.close-menu-btn') || e.target === DOMElements.menu.overlay) toggleMenu();
-            if (e.target.closest('.search-btn') || e.target.closest('.close-search-btn')) toggleSearch();
-            if (e.target.closest('#lightboxClose') || e.target === DOMElements.lightbox.overlay) hideLightbox();
-            if (e.target === DOMElements.languageModal.closeBtn) actions.closeLanguageModal();
-        });
-        
-        document.body.addEventListener('change', e => {
-            if (e.target.id === 'darkModeToggle') actions.toggleDarkMode(e.target.checked);
-            if (e.target.id === 'soundOnClickToggle') actions.toggleSound(e.target.checked);
-            if (e.target.id === 'heartAnimationToggle') actions.toggleHeartAnimation(e.target.checked);
-        });
-        
-        // --- FIXED SEARCH FUNCTIONALITY ---
-        DOMElements.search.input.oninput = (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            const container = DOMElements.search.resultsContainer;
-            
-            if (query.length < 1) { 
-                container.innerHTML = ''; 
-                return; 
-            }
-
-            const results = state.apps.filter(app => (app.name || "").toLowerCase().includes(query));
-            
-            if (results.length > 0) {
-                container.innerHTML = results.map(app => createAppCardNode(app).outerHTML).join('');
-                // Re-attach click listeners specifically for search results
-                container.querySelectorAll('.app-card').forEach(card => {
-                    card.onclick = () => { toggleSearch(); showItemDetail(card.dataset.id); };
-                });
-            } else {
-                container.innerHTML = `<p style="color:var(--text-secondary); text-align:center; grid-column: 1 / -1; margin-top: 20px;">${t('noResults')}</p>`;
-            }
-        };
-    }
-
-    function hideLoadingScreen() {
-        const screen = document.getElementById('loadingScreen');
-        if (screen) {
-            screen.style.opacity = '0';
-            setTimeout(() => { screen.style.visibility = 'hidden'; }, 600);
-        }
-    }
-
-    async function fetchApps() {
-        try {
-            const snapshot = await db.ref('apps').once('value');
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                const newApps = Object.keys(data).map(key => ({ id: key, ...data[key] })).sort((a, b) => (b.addedTimestamp || b.timestamp || 0) - (a.addedTimestamp || a.timestamp || 0));
-                
-                state.apps = newApps;
-                localStorage.setItem('apps_cache', JSON.stringify(newApps));
-                localStorage.setItem('apps_timestamp', Date.now());
-
-                hideLoadingScreen();
-                return newApps;
-            } else {
-                hideLoadingScreen();
-            }
-        } catch (error) {
-            console.error("Firebase error:", error);
-            hideLoadingScreen();
-            return null;
-        }
-    }
-
-    function setupRealtimeListener() {
-        if ("Notification" in window) Notification.requestPermission();
-        let firstLoad = true;
-        const initialTimestamp = Date.now();
-
-        db.ref('apps').limitToLast(1).on('child_added', (snapshot) => {
-            const appData = snapshot.val();
-            const appId = snapshot.key;
-            const app = { id: appId, ...appData };
-            const appTime = app.addedTimestamp || app.timestamp || 0;
-
-            if (!firstLoad && appTime > initialTimestamp) {
-                showInAppNotification(app);
-            }
-            firstLoad = false;
-        });
-    }
-
-    function showInAppNotification(app) {
-        if (navigator.vibrate) try { navigator.vibrate([500, 200, 500]); } catch (e) {}
-        const audio = document.getElementById('notifSound');
-        if (audio) { audio.volume = 0.5; audio.play().catch(e => {}); }
-
-        const toast = document.getElementById('notificationToast');
-        const notifImg = document.getElementById('notifImage');
-        const notifMsg = document.getElementById('notifMessage');
-
-        notifImg.src = app.img || 'https://i.ibb.co/68Z2pL4/placeholder.png';
-        notifMsg.textContent = `${app.name} is now available!`;
-        
-        toast.onclick = () => {
-            toast.classList.remove('active');
-            fetchApps().then(() => showItemDetail(app.id));
-        };
-
-        toast.classList.add('active');
-        setTimeout(() => toast.classList.remove('active'), 5000);
-    }
-
-    async function initialLoad() {
-        DOMElements = {
-            appRoot: document.getElementById('appRoot'),
-            header: document.querySelector('.header'),
-            welcomeTitle: document.querySelector('.welcome-title'),
-            bottomNav: document.getElementById('bottomNav'),
-            pages: {
-                home: document.getElementById('homePage'),
-                details: document.getElementById('detailPage'),
-                favorites: document.getElementById('favoritesPage'),
-                settings: document.getElementById('settingsPage'),
-            },
-            home: {
-                appGrid: document.getElementById('appGrid'),
-                pagination: document.getElementById('paginationContainer'),
-                popularCarousel: document.getElementById('popularCarouselContainer'),
-                pageTitle: document.getElementById('pageTitle'),
-            },
-            search: {
-                overlay: document.getElementById('searchOverlay'),
-                input: document.getElementById('mainSearchInput'),
-                resultsContainer: document.getElementById('searchResultsContainer'),
-                label: document.querySelector('#searchOverlay .search-label'),
-                closeBtn: document.querySelector('#searchOverlay .close-search-btn')
-            },
-            menu: {
-                overlay: document.querySelector('.menu-overlay'),
-                container: document.querySelector('.side-menu'),
-                brand: document.querySelector('.side-menu-brand'),
-                nav: document.getElementById('sideMenuNav'),
-            },
-            lightbox: {
-                overlay: document.getElementById('lightboxOverlay'),
-                image: document.getElementById('lightboxImage'),
-                closeBtn: document.getElementById('lightboxClose'),
-            },
-            languageModal: {
-                container: document.getElementById('languageModal'),
-                title: document.querySelector('#languageModal .modal-title'),
-                body: document.querySelector('#languageModal .modal-body'),
-                closeBtn: document.querySelector('#languageModal .modal-close'),
-            }
-        };
-
-        if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
-        else localStorage.setItem('darkMode', 'false');
-
-        if (localStorage.getItem('soundOnClick') === null) localStorage.setItem('soundOnClick', 'true');
-        if (localStorage.getItem('heartAnimation') === null) localStorage.setItem('heartAnimation', 'true');
-        
-        if (state.activeLang === 'ar') document.documentElement.setAttribute('dir', 'rtl');
-        else document.documentElement.setAttribute('dir', 'ltr');
-
-        preRenderSettingsPage();
-        setupRealtimeListener();
-
-        const cachedApps = JSON.parse(localStorage.getItem('apps_cache'));
-        const cacheTimestamp = localStorage.getItem('apps_timestamp');
-        const CACHE_DURATION = 3600 * 1000;
-
-        if (cachedApps && (Date.now() - cacheTimestamp < CACHE_DURATION)) {
-            state.apps = cachedApps;
-            createSideNav();
-            setActivePage('home');
-            hideLoadingScreen();
-            const freshApps = await fetchApps();
-            if (freshApps && JSON.stringify(freshApps) !== JSON.stringify(cachedApps)) {
-                if(state.activePage === 'home') renderHomePage();
-            }
-        } else {
-            await fetchApps();
-            createSideNav();
-            setActivePage('home');
-        }
-    }
-    
-    // --- UPDATED WINTER SNOW ANIMATION ---
-    function setupWinterAnimation() {
-        if (localStorage.getItem('heartAnimation') === 'false') return;
-
-        const container = document.getElementById('hearts-container');
-        if (!container) return;
-
-        // More frequent snowflakes
-        setInterval(() => {
-            if (container.childElementCount > 60) return; // Allow more flakes
-
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            
-            // Larger Size: 6px to 18px
-            const size = Math.random() * 12 + 6; 
-            snowflake.style.width = `${size}px`;
-            snowflake.style.height = `${size}px`;
-            
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            
-            const duration = Math.random() * 5 + 5; 
-            snowflake.style.animationDuration = `${duration}s`;
-            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
-
-            container.appendChild(snowflake);
-
-            setTimeout(() => {
-                snowflake.remove();
-            }, duration * 1000); 
-
-        }, 70); // Faster interval (70ms)
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        const dayOfWeek = new Date().getDay();
-        document.body.classList.add('day-' + dayOfWeek);
-        initialLoad(); // Ensure DOM Elements are set
-        setupGlobalEventListeners();
-        setupWinterAnimation(); 
+    // Rating stars
+    $$('#ratingStars .rating-star').forEach(star => {
+        star.onmouseenter = () => highlightStars(star.dataset.score);
+        star.onmouseleave = () => highlightStars(0);
+        star.onclick = () => submitRating(item.id, star.dataset.score);
     });
-    
-    function createPopularCardHTML(app) {
-        return `<div class="popular-card-item" data-id="${app.id}"><div class="popular-card-base"><div class="popular-app-logo-wrapper"><img src="${app.img}" class="popular-app-logo" onerror="this.src='https.i.ibb.co/68Z2pL4/placeholder.png';"></div></div><h3 class="popular-card-app-name">${app.name}</h3></div>`;
+
+    // Screenshots
+    $$('.screenshot-thumb').forEach(thumb => {
+        thumb.onclick = () => openLightbox(thumb.src);
+    });
+}
+
+function highlightStars(score) {
+    $$('#ratingStars .rating-star').forEach((s, i) => {
+        s.textContent = i < score ? 'star' : 'star_border';
+        s.classList.toggle('active', i < score);
+    });
+}
+
+function submitRating(id, score) {
+    const s = parseInt(score);
+    if (!db) return;
+    db.ref('apps/' + id + '/reviews').push({ rating: s, timestamp: Date.now() })
+        .then(() => showToast('Thanks!', 'Your rating has been submitted.'))
+        .catch(e => console.error(e));
+}
+
+// ==================== NAVIGATION ====================
+function showPage(name) {
+    state.prevPage = state.activePage;
+    state.activePage = name;
+    $$('.page').forEach(p => p.classList.remove('active'));
+    $(`#page${name.charAt(0).toUpperCase() + name.slice(1)}`).classList.add('active');
+
+    const titles = { home: t('homeTitle'), categories: t('categories'), favorites: t('favoritesTitle'), downloads: t('downloads'), profile: t('profile'), settings: t('settingsTitle') };
+    $('#headerTitle').textContent = titles[name] || 'HyperMod';
+    $('#appHeader').style.display = (name === 'detail' || name === 'settings') ? 'none' : 'flex';
+    $('#bottomNav').style.display = (name === 'detail' || name === 'settings') ? 'none' : 'flex';
+
+    $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === name));
+
+    if (name === 'home') renderHome();
+    if (name === 'categories') renderCategories();
+    if (name === 'favorites') renderFavorites();
+    if (name === 'downloads') renderDownloads();
+    window.scrollTo(0, 0);
+}
+
+function goBack() {
+    showPage(state.prevPage || 'home');
+}
+
+function openDetail(id) {
+    renderDetail(id);
+    showPage('detail');
+}
+
+// ==================== ACTIONS ====================
+function toggleFavorite(id) {
+    const sid = String(id);
+    const idx = state.favorites.indexOf(sid);
+    if (idx > -1) state.favorites.splice(idx, 1);
+    else state.favorites.push(sid);
+    safeSetJSON('favorites', state.favorites);
+    const btn = $('#detailFavBtn');
+    if (btn) {
+        btn.innerHTML = `<span class="material-icons-round">${state.favorites.includes(sid) ? 'favorite' : 'favorite_border'}</span>`;
+        btn.classList.toggle('active', state.favorites.includes(sid));
     }
+    if (state.activePage === 'favorites') renderFavorites();
+}
+
+function startDownload(appId) {
+    const app = state.apps.find(a => String(a.id) === String(appId));
+    if (!app) return;
+    // Open the actual download link in browser
+    if (app.link && app.link !== '#') {
+        window.open(app.link, '_blank');
+    }
+    const existing = state.downloads.find(d => String(d.appId) === String(appId) && d.status !== 'completed');
+    if (existing) { showToast('Downloading', `${app.name} is already downloading.`); return; }
+
+    const dl = { id: 'dl_' + Date.now(), appId: appId, progress: 0, status: 'downloading', speed: '2.4 MB/s', timestamp: Date.now() };
+    state.downloads.push(dl);
+    safeSetJSON('downloads', state.downloads);
+    showToast('Started', `Downloading ${app.name}...`);
+    simulateDownload(dl.id);
+}
+
+function simulateDownload(dlId) {
+    const dl = state.downloads.find(d => d.id === dlId);
+    if (!dl) return;
+    const interval = setInterval(() => {
+        dl.progress += Math.random() * 8 + 2;
+        if (dl.progress >= 100) { dl.progress = 100; dl.status = 'completed'; clearInterval(interval); }
+        safeSetJSON('downloads', state.downloads);
+        if (state.activePage === 'downloads') renderDownloads();
+    }, 800);
+}
+
+function removeDownload(dlId) {
+    state.downloads = state.downloads.filter(d => d.id !== dlId);
+    safeSetJSON('downloads', state.downloads);
+    renderDownloads();
+}
+
+function showToast(title, body) {
+    const toast = $('#toast');
+    $('#toastTitle').textContent = title;
+    $('#toastBody').textContent = body;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function openLightbox(src) {
+    $('#lightboxImg').src = src;
+    $('#lightbox').classList.add('active');
+}
+
+function closeLightbox() {
+    $('#lightbox').classList.remove('active');
+}
+
+function openLangModal() {
+    $('#langModalTitle').textContent = t('langLabel');
+    $('#langModalBody').innerHTML = Object.entries(allLanguages).map(([code, name]) => 
+        `<div class="lang-row ${code === state.activeLang ? 'active' : ''}" data-lang="${code}"><span>${name}</span>${code === state.activeLang ? '<span class="material-icons-round" style="color:var(--primary)">check</span>' : ''}</div>`
+    ).join('');
+    $('#langModal').classList.add('active');
+}
+
+function closeLangModal() {
+    $('#langModal').classList.remove('active');
+}
+
+function setLanguage(lang) {
+    state.activeLang = lang;
+    safeSetItem('language', lang);
+    location.reload();
+}
+
+function toggleDarkMode(on) {
+    document.body.classList.toggle('dark-mode', on);
+    safeSetItem('darkMode', on);
+    $$('input[type="checkbox"]').forEach(cb => { if (cb.id && cb.id.includes('dark')) cb.checked = on; });
+}
+
+function toggleSnow(on) {
+    safeSetItem('heartAnimation', on);
+    if (!on) { $('#hearts-container').innerHTML = ''; }
+    else setupSnow();
+    $$('input[type="checkbox"]').forEach(cb => { if (cb.id && cb.id.includes('snow')) cb.checked = on; });
+}
+
+function toggleVib(on) {
+    safeSetItem('soundOnClick', on);
+    $$('input[type="checkbox"]').forEach(cb => { if (cb.id && cb.id.includes('vib')) cb.checked = on; });
+}
+
+// ==================== EVENTS ====================
+document.addEventListener('click', e => {
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    const action = el.dataset.action;
+
+    if (localStorage.getItem('soundOnClick') === 'true' && navigator.vibrate) {
+        try { navigator.vibrate(8); } catch(err) {}
+    }
+
+    switch(action) {
+        case 'navigate': showPage(el.dataset.page); break;
+        case 'changePage': state.currentPage = parseInt(el.dataset.page); renderHome(); window.scrollTo(0,0); break;
+        case 'filterCategory': 
+            state.currentFilter = el.dataset.cat; 
+            state.currentPage = 1; 
+            showPage('home'); 
+            break;
+        case 'quickDownload': { const qapp = state.apps.find(a=>String(a.id)===String(el.dataset.id)); if(qapp && qapp.link) window.open(qapp.link, '_blank'); startDownload(el.dataset.id); break; }
+        case 'toggleFavorite': toggleFavorite(el.dataset.id); break;
+        case 'rateApp': submitRating(el.dataset.id, el.dataset.score); break;
+        case 'openLanguageModal': openLangModal(); break;
+        case 'openSettings': showPage('settings'); break;
+        case 'openTelegram': window.open('https://t.me/+NHsqBBMg1NMxMmY1', '_blank'); break;
+        case 'requestApp': window.open('https://t.me/+NHsqBBMg1NMxMmY1', '_blank'); break;
+        case 'clearCache': 
+            try { localStorage.removeItem('apps_cache'); localStorage.removeItem('apps_timestamp'); } catch(e){}
+            showToast('Cache Cleared', 'Reloading...'); setTimeout(() => location.reload(), 1000); 
+            break;
+        case 'clearAllData': 
+            try { localStorage.clear(); } catch(e){}
+            showToast('Data Cleared', 'Reloading...'); setTimeout(() => location.reload(), 1000); 
+            break;
+        case 'removeDownload': removeDownload(el.dataset.did); break;
+        case 'pauseDownload': 
+            const d = state.downloads.find(x => x.id === el.dataset.did);
+            if (d) { d.status = d.status === 'paused' ? 'downloading' : 'paused'; renderDownloads(); }
+            break;
+    }
+});
+
+// Bottom nav
+$('#bottomNav').addEventListener('click', e => {
+    const item = e.target.closest('.nav-item');
+    if (item) showPage(item.dataset.page);
+});
+
+// Menu
+$('#menuBtn').onclick = () => { $('#sideMenu').classList.add('active'); $('#menuOverlay').classList.add('active'); };
+$('#closeMenu').onclick = () => { $('#sideMenu').classList.remove('active'); $('#menuOverlay').classList.remove('active'); };
+$('#menuOverlay').onclick = () => { $('#sideMenu').classList.remove('active'); $('#menuOverlay').classList.remove('active'); };
+
+// Search
+$('#searchBtn').onclick = () => { $('#searchOverlay').classList.add('active'); $('#searchInput').focus(); };
+$('#closeSearch').onclick = () => { $('#searchOverlay').classList.remove('active'); $('#searchInput').value = ''; $('#searchResults').innerHTML = ''; };
+$('#searchClear').onclick = () => { $('#searchInput').value = ''; $('#searchResults').innerHTML = ''; $('#searchInput').focus(); };
+$('#searchInput').oninput = e => {
+    const q = e.target.value.toLowerCase().trim();
+    $('#searchClear').style.display = q ? 'flex' : 'none';
+    if (!q) { $('#searchResults').innerHTML = ''; return; }
+    const results = state.apps.filter(a => (a.name || '').toLowerCase().includes(q));
+    if (!results.length) { $('#searchResults').innerHTML = `<div class="empty-state" style="padding:40px;"><h3>${t('noResults')}</h3></div>`; return; }
+    $('#searchResults').innerHTML = `<div class="app-list" style="padding:0;">` + results.map(app => {
+        const rating = app.averageRating ? app.averageRating.toFixed(1) : (app.rating || 0);
+        return `<div class="app-list-item" data-id="${app.id}">
+            <img class="app-list-icon" src="${app.img || 'https://i.ibb.co/68Z2pL4/placeholder.png'}" onerror="this.src='https://i.ibb.co/68Z2pL4/placeholder.png'">
+            <div class="app-list-info">
+                <div class="app-list-name">${app.name} ${app.isPremium ? '<span class="app-list-badge">MOD</span>' : ''}</div>
+                <div class="app-list-meta"><span class="star">★</span> ${rating} &bull; v${app.version || 'N/A'} &bull; ${app.size || ''}</div>
+            </div>
+        </div>`;
+    }).join('') + `</div>`;
+};
+
+// App click delegation (list items)
+document.addEventListener('click', e => {
+    const card = e.target.closest('.app-list-item[data-id], .popular-card[data-id], .fav-list-item[data-id]');
+    if (card && !e.target.closest('[data-action]')) openDetail(card.dataset.id);
+});
+
+// Lightbox
+$('#lightboxClose').onclick = closeLightbox;
+$('#lightbox').onclick = e => { if (e.target === $('#lightbox')) closeLightbox(); };
+
+// Lang modal
+$('#langModalClose').onclick = closeLangModal;
+$('#langModal').onclick = e => { if (e.target === $('#langModal')) closeLangModal(); };
+$('#langModalBody').onclick = e => {
+    const row = e.target.closest('.lang-row');
+    if (row) setLanguage(row.dataset.lang);
+};
+
+// Toggles
+$('#darkToggle').onchange = e => toggleDarkMode(e.target.checked);
+$('#darkToggle2').onchange = e => toggleDarkMode(e.target.checked);
+$('#snowToggle').onchange = e => toggleSnow(e.target.checked);
+$('#snowToggle2').onchange = e => toggleSnow(e.target.checked);
+$('#vibToggle').onchange = e => toggleVib(e.target.checked);
+$('#vibToggle2').onchange = e => toggleVib(e.target.checked);
+
+// Download tabs
+$$('.download-tab').forEach(tab => {
+    tab.onclick = () => {
+        $$('.download-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        state.downloadTab = tab.dataset.tab;
+        renderDownloads();
+    };
+});
+
+// Header scroll effect
+window.addEventListener('scroll', () => {
+    $('#appHeader').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// ==================== DATA ====================
+async function fetchApps() {
+    if (!db) { hideLoader(); return; }
+    try {
+        const snap = await db.ref('apps').once('value');
+        if (snap.exists()) {
+            const data = snap.val();
+            const apps = Object.keys(data).map(k => ({ id: k, ...data[k] }))
+                .sort((a,b) => (b.addedTimestamp||b.timestamp||0) - (a.addedTimestamp||a.timestamp||0));
+            state.apps = apps;
+            safeSetJSON('apps_cache', apps);
+            safeSetItem('apps_timestamp', Date.now());
+        }
+    } catch(err) { console.error('Fetch error:', err); }
+    hideLoader();
+}
+
+function hideLoader() {
+    const s = $('#loadingScreen');
+    s.style.opacity = '0';
+    setTimeout(() => s.style.display = 'none', 500);
+}
+
+function setupRealtime() {
+    if (!db) return;
+    if ('Notification' in window) { try { Notification.requestPermission(); } catch(e){} }
+    let first = true;
+    const startTime = Date.now();
+    db.ref('apps').limitToLast(1).on('child_added', snap => {
+        const app = snap.val();
+        const time = app.addedTimestamp || app.timestamp || 0;
+        if (!first && time > startTime) {
+            showToast('New Update!', `${app.name} is now available!`);
+        }
+        first = false;
+    });
+}
+
+function buildSideMenu() {
+    const cats = ['home', ...new Set(state.apps.map(a => a.category || 'Apps').filter(Boolean))];
+    const icons = { home:'home', Games:'sports_esports', Apps:'apps', Premium:'workspace_premium', Tools:'build', 'AI Apps':'psychology', Emulators:'videogame_asset', Entertainment:'movie', Social:'group', Video:'movie', Photo:'photo_camera' };
+    $('#sideMenuNav').innerHTML = cats.map(cat => `
+        <div class="side-menu-item ${state.currentFilter === cat ? 'active' : ''}" data-action="filterCategory" data-cat="${cat}">
+            <span class="material-icons-round">${icons[cat] || 'apps'}</span>
+            <span>${cat === 'home' ? t('latestApps') : cat}</span>
+        </div>`).join('');
+}
+
+// ==================== SNOW ====================
+function setupSnow() {
+    if (localStorage.getItem('heartAnimation') === 'false') return;
+    const c = $('#hearts-container');
+    if (!c) return;
+    setInterval(() => {
+        if (c.childElementCount > 50) return;
+        const flake = document.createElement('div');
+        flake.style.cssText = `position:fixed;top:-20px;left:${Math.random()*100}vw;width:${Math.random()*10+4}px;height:${Math.random()*10+4}px;background:rgba(124,58,237,0.3);border-radius:50%;pointer-events:none;z-index:9998;animation:fall ${Math.random()*4+4}s linear forwards;`;
+        c.appendChild(flake);
+        setTimeout(() => flake.remove(), 8000);
+    }, 100);
+}
+
+// Add fall animation
+const style = document.createElement('style');
+style.textContent = `@keyframes fall { to { transform:translateY(110vh) translateX(20px); opacity:0; } }`;
+document.head.appendChild(style);
+
+// ==================== INIT ====================
+async function init() {
+    // Dark mode
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        $$('input[type="checkbox"]').forEach(cb => { if (cb.id && cb.id.includes('dark')) cb.checked = true; });
+    }
+    // Snow toggle
+    const snowOn = localStorage.getItem('heartAnimation') !== 'false';
+    $$('input[type="checkbox"]').forEach(cb => { if (cb.id && cb.id.includes('snow')) cb.checked = snowOn; });
+    // Vib toggle
+    const vibOn = localStorage.getItem('soundOnClick') !== 'false';
+    $$('input[type="checkbox"]').forEach(cb => { if (cb.id && cb.id.includes('vib')) cb.checked = vibOn; });
+    // RTL
+    if (state.activeLang === 'ar') document.documentElement.setAttribute('dir', 'rtl');
+    else document.documentElement.setAttribute('dir', 'ltr');
+    // Current lang label
+    $('#currentLangLabel').textContent = allLanguages[state.activeLang] || 'English';
+
+    setupRealtime();
+
+    const cached = safeGetJSON('apps_cache', null);
+    const ts = localStorage.getItem('apps_timestamp');
+    const CACHE_DURATION = 3600 * 1000;
+
+    if (cached && Array.isArray(cached) && cached.length > 0 && ts && (Date.now() - parseInt(ts) < CACHE_DURATION)) {
+        state.apps = cached;
+        buildSideMenu();
+        showPage('home');
+        hideLoader();
+        const fresh = await fetchApps();
+        if (fresh && JSON.stringify(fresh) !== JSON.stringify(cached) && state.activePage === 'home') renderHome();
+    } else {
+        await fetchApps();
+        buildSideMenu();
+        showPage('home');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+    setupSnow();
+});
 </script>
 
 </body>
